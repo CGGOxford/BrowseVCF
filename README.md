@@ -6,23 +6,20 @@ BrowseVCF is a web-based application and workflow to quickly prioritise disease-
 Download the .zip file at the bottom of this page, unzip it somewhere, and double-click on launcher-windows.bat in the web directory. This version is shipped with a stripped-down WinPython v2.7.10, and pre-compiled wormtable modules. Tested on Windows 7.
 
 ##### *GNU/Linux-specific notes*
-Download the .tar.gz file at the bottom of this page, extract it and launch the application. You should have a Python 2.7 install along with the wormtable package (>= 0.1.5).
+Download the .tar.gz file at the bottom of this page, extract it and launch the application. You should have a Python 2.7 install along with the wormtable package (>= 0.1.5a1).
 
 ### Usage as stand-alone web application
 BrowseVCF used as web application is composed of four steps:
-1. upload and pre-process your input .vcf or .vcf.gz file
-2. create indexes for one or more annotation fields of interest
-3. filter variants according to different criteria/fields/cutoffs
-4. export results and query history
+1. Upload and pre-process your input .vcf or .vcf.gz file
+2. Create indexes for one or more annotation fields of interest
+3. Filter variants according to different criteria/fields/cutoffs
+4. Export results and query history
 
 ### Usage as command-line tool
 The folder "scripts" contains the key set of Python scripts that perform the same actions of the web application. To see the list of required and optional parameters of any script, simply write:
+
 ```sh
 $ python script_name.py --help
-```
-or:
-```sh
-$ ./script_name.py --help
 ```
 
 ### Development
