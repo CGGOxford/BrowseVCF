@@ -1,4 +1,4 @@
-var app = angular.module("mainApp", ['ngStorage', 'ngAnimate', 'ui.bootstrap', 'nya.bootstrap.select', 'ui.router', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.autoResize', 'ui.grid.moveColumns']);
+var app = angular.module("mainApp", ['ngStorage', 'ngAnimate', 'ui.bootstrap', 'nya.bootstrap.select', 'hc.marked', 'ui.router', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.autoResize', 'ui.grid.moveColumns']);
 
 app.config(function($stateProvider, $urlRouterProvider) {
 
