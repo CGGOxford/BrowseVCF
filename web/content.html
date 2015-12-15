@@ -1,0 +1,86 @@
+<!-- content.html -->
+<div class="row">
+  <div class="jumbotron container-fluid" style="background: #002649;">
+    <div class="col-md-8">
+      <h1>BrowseVCF</h1>
+      <p>A fast-filtering tool to prioritise disease-causing variants</p>
+    </div>
+    <div class="col-md-4">
+      <img id="tools-image" src="images/logo.png" width="100%" style="padding-top: 15px !important;"/>
+    </div>
+
+    <div class="col-md-12">
+      <nav>
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/about" style="font-weight: bold;">About</a></li>
+            <li><a href="/contact" style="font-weight: bold;">Contact</a></li>
+            <li><a href="/faq" style="font-weight: bold;">FAQ</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+
+    <div id="content-container">
+
+        <!-- the links to our nested states using relative paths -->
+        <!-- add the active class if the state matches our ui-sref -->
+        <div id="status-buttons" class="text-center">
+          <a ui-sref-active="active" ui-sref=".vcfload">
+            <span class="fa fa-upload fa-2x fa-border"></span>
+            <br /> 1. Load VCF
+          </a>
+          <a ng-if="$storage.OGCWOrkingDir != null" ui-sref-active="active" ui-sref=".wormtables">
+            <span class="fa fa-table fa-2x fa-border"></span>
+            <br /> 2. Create Indexes
+          </a>
+
+          <a ng-if="$storage.OGCWOrkingDir == null || !$storage.OGCWOrkingDir" ui-sref-active="active">
+            <span class="text-muted">
+              <i class="fa fa-2x fa-table fa-border"></i>
+              <br /> 2. Create Wormtables
+            </span>
+          </a>
+
+          <a ng-if="$storage.OGCWOrkingDir != null" ui-sref-active="active" ui-sref=".filters">
+            <span class="fa fa-filter fa-2x fa-border"></span>
+            <br /> 3. Filter
+          </a>
+          <a ng-if="$storage.OGCWOrkingDir == null || !$storage.OGCWOrkingDir" ui-sref-active="active">
+            <span class="text-muted">
+              <i class="fa fa-2x fa-filter fa-border"></i>
+              <br /> 3. Filter
+            </span>
+          </a>
+
+          <a ng-if="filterHistory.length <= 1" ui-sref-active="active">
+            <span class="text-muted">
+              <i class="fa fa-2x fa-floppy-o fa-border"></i>
+              <br /> 4. Export History & Results
+            </span>
+          </a>
+          <a ng-if="filterHistory.length > 1" ui-sref-active="active" ui-sref=".export">
+            <span class="fa fa-floppy-o fa-2x fa-border"></span>
+            <br /> 4. Export History & Results
+          </a>
+
+        </div>
+        <div class="text-center" style="padding: 10px;"">
+        <span class="small bg-success" ng-if="$storage.OGCWOrkingDir">&nbsp;&nbsp;Your working directory for this VCF is: {{$storage.OGCWOrkingDir}}&nbsp;&nbsp;</span>
+      </div>
+      <!-- use ng-submit to catch the form submission and use our Angular function -->
+
+
+      <!-- our nested state views will be injected here -->
+      <div id="content-views" ui-view autoscroll="false"></div>
+
+    </div>
+
+  </div>

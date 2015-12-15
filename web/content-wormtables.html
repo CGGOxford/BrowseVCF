@@ -1,0 +1,43 @@
+<div class="col-md-12">
+  <form name="myForm" ng-submit="submitFieldIndexForm()" role="form">
+
+    <div class="form-group" ng-class="{'has-error': myForm.select1.$invalid}">
+      <p class="tab">
+        <label class="description" for="element_2">Step 2: Select the fields you want to index. You can add more fields later if necessary.</label>
+        <!-- <select class="form-control m-t-10" multiple ng-model="formData.selval" ng-options="selval as selval.fname for selval in myfields"></select> -->
+          <ol class="nya-bs-select form-control btn-primary" ng-model="formData.selval" required data-live-search="true" data-size="10" data-selected-text-format="count" multiple>
+            <li nya-bs-option="selval in myfields" data-value="selval.fname">
+              <a>
+                <span class="text-danger">{{selval.fname}}</span><span class="text-info"> -- {{selval.fdesc}}</span>
+                <span class="glyphicon glyphicon-ok check-mark"></span>
+              </a>
+            </li>
+          </ol>
+          <p class="text-danger" ng-show="myForm.select1.$invalid">Please select at least one option</p>
+
+    </div>
+    <div class="form-group has-success">
+        <label class="control-label" for="coreInputBox">
+          Number of CPUs to use <i>(pick a number between 0 and {{availCores}} - '0' will use all CPUs)</i>
+        </label>
+
+        <input type="text" id="coreInputBox" class="form-control" name="numCores" value="0" ng-model="formData.numCores" />
+
+      <br /><br />
+      <button type="submit" class="btn btn-success" ng-disabled="isIndexingVCF"><span data-ng-hide="isIndexingVCF">Index Selected Fields</span><span data-ng-show="isIndexingVCF">Indexing Selected Fields...&nbsp;&nbsp;<i class="fa fa-spinner fa-spin"></i></span></button>
+    </p>
+    </div>
+
+  </form>
+</div>
+
+<div class="col-md-12">
+  Are you filtering on specific functional effects/consequences? <br />
+  This VCF browser will work on any VCF. However, if your variants have been annotated with any of the following tools, click on the appropriate link below to see the corresponding list of terms used for the annotation,
+  and then generate the appropriate wormtables from the list above: <br /><br />
+
+  <a href="http://www.ensembl.org/info/genome/variation/predicted_data.html#consequences" target="_blank">VEP</a><br />
+  <!-- <a href="http://annovar.openbioinformatics.org/en/latest/user-guide/gene/" target="_blank">Annovar</a><br /> -->
+  <a href="http://snpeff.sourceforge.net/SnpEff_manual.html#input" target="_blank">SnpEff</a>
+
+</div>

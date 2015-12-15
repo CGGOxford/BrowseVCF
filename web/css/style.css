@@ -1,0 +1,130 @@
+/* when one clicks on the little 'trash can' fontawesome icon, it should act as though it's a link, and change the cursor to a hand */
+.historycursor {
+  cursor: pointer;
+}
+
+/* Override bootstrap primary colour to OXFORD BLUE */
+.btn-primary {
+
+   background-color: #002649;
+}
+
+.text-muted {
+  color: #888;
+}
+
+/* Override jumbotron settings */
+.jumbotron {
+  min-height: 1px;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+.jumbotron h1{
+    color: #fff;
+}
+
+.jumbotron p{
+    color: #bbb;
+}
+
+/* Override navbar size */
+.navbar-nav > li > a, .navbar-brand {
+    padding-top:5px !important; padding-bottom:0 !important;
+    height: 30px;
+}
+
+/* Override hover colours, adapted from: http://stackoverflow.com/a/19203953 */
+.navbar-nav > li > a:hover, .navbar-nav > li > a:focus {
+
+    background-color: #93C54B;
+    color: #002649;
+}
+
+.navbar {min-height:30px !important;}
+
+/* style.css */
+/* BASIC STYLINGS
+============================================================================= */
+body                            { padding-top:20px; }
+
+/* form styling */
+/* #content-container                { background:#2f2f2f; margin-bottom:20px;
+    border-radius:5px; } */
+
+#content-container                { margin-bottom:20px;
+        border-radius:5px; }
+
+#content-container .page-header   { background:#FFF; margin:0; padding:30px;
+    border-top-left-radius:5px; border-top-right-radius:5px; }
+
+/* numbered buttons */
+#status-buttons                 {  }
+#status-buttons a               { color:#002649; display:inline-block; font-size:12px; margin-right:10px; text-align:center; text-transform:uppercase; }
+#status-buttons a:hover         { text-decoration:none; }
+
+/* we will style the span as the circled number */
+/* #status-buttons span            { background:#0a0a0a; display:block; height:50px; margin:0 auto 50px; padding-top:0px; width:50px;
+    border-radius:50%; } */
+
+/* active buttons turn light green-blue*/
+#status-buttons a.active span   { background:#93C54B; }
+
+
+
+
+
+/* style.css */
+/* ANIMATION STYLINGS
+============================================================================= */
+#vcfform            { position:relative; min-height:300px; overflow:hidden; padding:30px; }
+#content-views             { width:auto; }
+
+/* basic styling for entering and leaving */
+/* left and right added to ensure full width */
+#content-views.ng-enter,
+#content-views.ng-leave      { position:absolute; left:30px; right:30px;
+    transition:0.5s all ease; -moz-transition:0.5s all ease; -webkit-transition:0.5s all ease;
+}
+
+/* enter animation */
+#content-views.ng-enter            {
+    -webkit-animation:slideInRight 0.5s both ease;
+    -moz-animation:slideInRight 0.5s both ease;
+    animation:slideInRight 0.5s both ease;
+}
+
+/* leave animation */
+#content-views.ng-leave            {
+    -webkit-animation:slideOutLeft 0.5s both ease;
+    -moz-animation:slideOutLeft 0.5s both ease;
+    animation:slideOutLeft 0.5s both ease;
+}
+
+/* ANIMATIONS
+============================================================================= */
+/* slide out to the left */
+@keyframes slideOutLeft {
+    to      { transform: translateX(-200%); }
+}
+@-moz-keyframes slideOutLeft {
+    to      { -moz-transform: translateX(-200%); }
+}
+@-webkit-keyframes slideOutLeft {
+    to      { -webkit-transform: translateX(-200%); }
+}
+
+/* slide in from the right */
+@keyframes slideInRight {
+    from    { transform:translateX(200%); }
+    to      { transform: translateX(0); }
+}
+@-moz-keyframes slideInRight {
+    from    { -moz-transform:translateX(200%); }
+    to      { -moz-transform: translateX(0); }
+}
+@-webkit-keyframes slideInRight {
+    from    { -webkit-transform:translateX(200%); }
+    to      { -webkit-transform: translateX(0); }
+}

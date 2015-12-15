@@ -1,0 +1,23 @@
+[
+    {
+        "name": "C:\\Projects\\bsg_github\\exome_variants.vcf.gz"
+    }, 
+    {
+        "name": "/home/varun/Projects/bsg_github/varun/vcf_filtering_ui/web/wholegenome_variants.vcf.gz"
+    }, 
+    {
+        "name": "/home/varun/Projects/bsg_github/varun/vcf_filtering_ui/web/NISTIntegratedCalls_14datasets_131103_allcall_UGHapMerge_HetHomVarPASS_VQSRv2.19_2mindatasets_5minYesNoRatio_all_nouncert_excludesimplerep_excludesegdups_excludedecoy_excludeRepSeqSTRs_noCNVs.vcf.gz"
+    }, 
+    {
+        "name": "/home/varun/Projects/bsg_github/varun/vcf_filtering_ui/web/input_chr2.vcf.gz"
+    }, 
+    {
+        "name": "/home/varun/Projects/bsg_github/varun/vcf_filtering_ui/web/exome_variants.vcf.gz"
+    }, 
+    {
+        "name": ""
+    }, 
+    {
+        "name": "/home/varun/Projects/bsg_github/BrowseVCF/web/exome_variants.vcf.gz"
+    }
+]

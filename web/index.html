@@ -1,0 +1,47 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Oxford Genomics Centre VCF Toolkit</title>
+
+  <meta name="description" content="An easy VCF browser for all your VCF filtering needs, brought to you by the Oxford Genomics Centre.">
+  <meta name="author" content="Varun Ramraj">
+
+  <!-- First import JQuery -->
+  <script src="js/jquery-2.1.4.min.js"></script>
+
+  <!-- Stylesheets -->
+  <!-- <link rel=stylesheet type=text/css href="css/font-awesome.min.css"> Use CDN to avoid font finding issues -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type=text/css href="css/bootstrap.min.css">
+  <link rel="stylesheet" type=text/css href="css/ui-grid.min.css">
+  <link rel="stylesheet" type=text/css href="css/style.css">
+  <link rel="stylesheet" type=text/css href="css/nya-bs-select.min.css">
+
+
+  <!-- Angular modules and scripts -->
+  <script src="js/angular.min.js"></script>
+  <script src="js/angular-cookies.min.js"></script>
+  <script src="js/angular-animate.min.js"></script>
+  <script src="js/angular-ui-router.min.js"></script>
+  <script src="js/ngStorage.min.js"></script>
+  <script src="js/ui-grid.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/ui-bootstrap-tpls-0.14.3.min.js"></script>
+  <script src="js/FileSaver.min.js"></script>
+  <script src="js/nya-bs-select.min.js"></script>
+  <script src="js/main.js"></script>
+
+</head>
+
+<body ng-app="mainApp">
+
+  <div class="container-fluid">
+
+    <div ui-view></div>
+  </div>
+</body>

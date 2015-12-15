@@ -1,0 +1,266 @@
+<div class="row">
+  <div class="col-md-3">
+
+    <h3 class="text-center text-primary">
+      Available VCF Filters
+    </h3>
+
+    <form ng-submit="submitFilterForm()" name="filterForm" role="form">
+
+      Currently selected filter: {{formData.whichFilter}}
+      <uib-accordion close-others="true">
+        <uib-accordion-group is-open="false" id="opt_a">
+          <uib-accordion-heading>
+            <span ng-click="setFilter('opt_a')">A) Filter variants according to a given field</span>
+          </uib-accordion-heading>
+          <div class="divstyle">
+            <p class="tabtab">
+              <label class="description" for="element_4">Choose field to filter the variants on: </label>
+            </p>
+            <div>
+              <p class="tabtab">
+                <select class="element select small form-control" id="element_4" name="element_4" ng-model="formData.opt_a_field_to_filter_variants">
+                  <option value="" selected hidden />
+                  <option ng-repeat="myval in opt_a_field_to_filter_variants" value="{{myval}}">{{myval}}</option>
+                </select>
+            </div>
+            </p>
+            <p class="tabtab">
+              <label class="description" for="element_5">Select operator </label>
+            </p>
+            <div>
+              <p class="tabtab">
+                <select class="element select small form-control" id="element_5" name="element_5" ng_model="formData.opt_a_operator">
+                  <option value="" selected hidden />
+                  <option ng-repeat="myval in opt_a_operator" value="{{myval}}">{{myval}}</option>
+                </select>
+            </div>
+            </p>
+            <p class="tabtab">
+              <label class="description" for="element_2">Specify the cutoff to apply </label>
+            </p>
+            <div>
+              <p class="tabtab">
+                <input id="element_2" name="element_2" class="element text small form-control" type="text" maxlength="255" value="" ng-model="formData.opt_a_cutoff" ng-pattern="/^[\w&.](,?[\w&.])*$/" />
+                <span ng-show="filterForm.element_2.$error.pattern">Please enter one value or a comma-separated list (no spaces between the commas)!</span>
+            </div>
+            </p>
+            <p class="tabtab">
+              <label class="description" for="element_6">Keep variants having no value in the selected field? </label>
+              <p class="tabtab">
+                <input type="checkbox" class="element checkbox-inline small" name="checkbox1" value="false" checked="false" ng-model="formData.opt_a_keep_none_variants">
+              </p>
+            </p>
+          </div>
+        </uib-accordion-group>
+
+        <uib-accordion-group is-open="false" is-disabled="nofilterb" id="opt_b">
+          <uib-accordion-heading>
+            <span ng-if="nofilterb == false" ng-click="setFilter('opt_b')">B) Get variants with a given genotype in one, some or all samples</span>
+            <span ng-if="nofilterb == true">B) Get variants with a given genotype in one, some or all samples (filter disabled; no sample genotypes found in VCF or no *.GT wormtables generated)</span>
+          </uib-accordion-heading>
+          <div class="divstyle">
+            <p class="tabtab">
+              <label class="description" for="element_11">Choose genotype </label>
+            </p>
+            <div>
+              <p class="tabtab">
+                <select class="element select small form-control" id="element_11" name="element_11" ng-model="formData.opt_b_genotype">
+                  <option value="" selected hidden />
+                  <option ng-repeat="(myk, myval) in opt_b_genotype" value="{{myk}}">{{myval}}</option>
+                </select>
+            </div>
+            </p>
+            <p class="tabtab">
+              <label class="description" for="element_12">Choose one or more samples </label>
+            </p>
+            <div>
+              <p class="tabtab">
+                <select class="element select small form-control" id="element_12" name="element_12" ng-model="formData.opt_b_sample" multiple>
+                  <option value="" selected hidden />
+                  <option ng-repeat="myval in opt_b_sample" value="{{myval}}">{{myval}}</option>
+                </select>
+            </div>
+            </p>
+          </div>
+        </uib-accordion-group>
+
+        <uib-accordion-group is-open="false" id="opt_c">
+          <uib-accordion-heading>
+            <span ng-click="setFilter('opt_c')">C) Get variants in a region of interest</span>
+          </uib-accordion-heading>
+          <div class="divstyle">
+            <p class="tabtab">
+              <label class="description" for="element_7">Select chromosome </label>
+            </p>
+            <div>
+              <p class="tabtab">
+                <input id="element_7" name="element_7" class="element text small form-control" type="text" maxlength="255" value="" ng-model="formData.opt_c_chromosome" />
+            </div>
+            </p>
+            <p class="tabtab">
+              <label class="description" for="element_8">Specify start position </label>
+            </p>
+            <div>
+              <p class="tabtab">
+                <input id="element_8" name="element_8" class="element text small form-control" type="text" maxlength="255" value="" ng-model="formData.opt_c_start_pos" ng-pattern="/^[0-9]+$/" />
+                <span ng-show="filterForm.element_8.$error.pattern">Please enter a number!</span>
+            </div>
+            </p>
+            <p class="tabtab">
+              <label class="description" for="element_9">Specify end position </label>
+            </p>
+            <div>
+              <p class="tabtab">
+                <input id="element_9" name="element_9" class="element text small form-control" type="text" maxlength="255" value="" ng-model="formData.opt_c_end_pos" ng-pattern="/^[0-9]+$/" />
+                <span ng-show="filterForm.element_9.$error.pattern">Please enter a number!</span>
+            </div>
+            </p>
+          </div>
+        </uib-accordion-group>
+
+        <uib-accordion-group is-open="false" id="opt_d">
+          <uib-accordion-heading>
+            <span ng-click="setFilter('opt_d')">D) Select only SNPs, only InDels or only MNPs</span>
+          </uib-accordion-heading>
+          <div class="divstyle">
+            <p class="tabtab">
+              <label class="description" for="element_13">Select variant type </label>
+            </p>
+            <div>
+              <p class="tabtab">
+                <select class="element select small form-control" id="element_13" name="element_13" ng-model="formData.opt_d_variant_type">
+                  <option value="" selected hidden />
+                  <option ng-repeat="myval in opt_d_variant_type" value="{{myval}}">{{myval}}</option>
+                </select>
+            </div>
+            </p>
+            <p class="guidelines tabtab" id="guide_13">
+              <small>SNPs = Single Nucleotide Polymorphisms
+                <br> InDels = Insertion and/or Deletions
+                <br> MNPs = Multi Nucleotide Polymorphisms
+              </small>
+            </p>
+          </div>
+        </uib-accordion-group>
+
+        <uib-accordion-group is-open="false" id="opt_e">
+          <uib-accordion-heading>
+            <span ng-click="setFilter('opt_e')">E) Get all variants associated with a given gene list</span>
+          </uib-accordion-heading>
+          <div class="divstyle">
+            <p class="tabtab">
+              <label class="description" for="element_14">Select which field to look in for your keyword </label>
+            </p>
+            <div>
+              <p class="tabtab">
+                <select class="element select small form-control" id="element_14" name="element_14" ng-model="formData.opt_e_keyword_field">
+                  <option value="" selected hidden />
+                  <option ng-repeat="myval in opt_e_keyword_field" value="{{myval}}">{{myval}}</option>
+                </select>
+            </div>
+            </p>
+            <p class="tabtab">
+              <label class="description" for="element_10">Paste gene names here (one per line!):</label>
+            </p>
+            <div>
+              <p class="tabtab">
+                <textarea id="element_10" name="element_10" class="form-control" rows="10" ng-model="formData.opt_e_genelist"></textarea>
+              </p>
+            <p class="tabtab">
+            <label class="description" for="element_6">Exclude these genes (negative query)? </label>
+                <p class="tabtab">
+                      <input type="checkbox" class="element checkbox-inline small" name="checkbox77" value="false" checked="false" ng-model="formData.opt_e_negative_query">
+                </p>
+            </p>
+          </div>
+
+          </div>
+        </uib-accordion-group>
+
+        <br />
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary" ng-disabled="isFilteringVCF">
+            <span data-ng-hide="isFilteringVCF">Filter VCF</span>
+            <span data-ng-show="isFilteringVCF">Filtering VCF...&nbsp;&nbsp;<i class="fa fa-spinner fa-spin"></i></span>
+          </button>
+        </div>
+
+      </uib-accordion>
+
+    </form>
+
+    <h3 class="text-center text-warning">
+      Filter History
+      <p class="text-muted small">Total variants: {{ totalvariants }}</p>
+    </h3>
+
+    <div class="list-group">
+      <div class="list-group-item list-group-item-success" ng-repeat="fh in filterHistory | startFrom:1" popover-trigger="mouseenter" popover-placement="top" uib-popover-title="InputParameters" uib-popover-template="'inputParameters.html'">
+        <i ng-if="fh.actionNumber == actionCounter && isRemovingHistoryItem == false" class="historycursor fa fa-trash-o" ng-click="removeHistoryItem(fh.outfile)"></i>
+        <i ng-if="fh.actionNumber == actionCounter && isRemovingHistoryItem == true" class="fa fa-spinner fa-spin"></i> &nbsp;{{fh.filterused}}
+
+
+        <span class="badge">{{fh.numresults}}</span>
+      </div>
+      <script type="text/ng-template" id="inputParameters.html">
+        <div ng-repeat="(fhk, fhv) in fh.inputdata">
+
+          {{ fhk | prettifyHistory }} : {{fhv}}
+
+        </div>
+      </script>
+
+    </div>
+
+  </div>
+
+
+  <!-- Results area to the right -->
+
+  <div class="col-md-9">
+    <div class="row">
+      <div class="col-md-12">
+        <h3 class="text-center text-primary">
+          Tabular output area
+        </h3>
+        <div ng-if="numresults">
+          <strong>Found {{numresults}} results. I can only display the top 100 right now.</strong>
+          <br />
+        </div>
+        <div class="grid m-b-20" ui-grid="parseresults" ui-grid-move-columns ui-grid-resize-columns ui-grid-auto-resize ui-grid-pinning ui-grid-selection ui-grid-grouping ui-grid-infinite-scroll>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- <div class="row">
+      <div class="text-right col-md-12">
+        <ul class="pagination">
+          <li>
+            <a href="#">Prev</a>
+          </li>
+          <li>
+            <a href="#">1</a>
+          </li>
+          <li>
+            <a href="#">2</a>
+          </li>
+          <li>
+            <a href="#">3</a>
+          </li>
+          <li>
+            <a href="#">4</a>
+          </li>
+          <li>
+            <a href="#">5</a>
+          </li>
+          <li>
+            <a href="#">Next</a>
+          </li>
+        </ul>
+      </div>
+    </div> -->
+  </div>
+</div>

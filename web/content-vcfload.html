@@ -1,0 +1,27 @@
+  <div class="col-md-12">
+
+
+    <form ng-submit="submitUploadForm()" role="form">
+    <div class="form-group has-warning">
+
+      <label class="description" for="element_1">Step 1: Choose your VCF file from this list of recent files below, or by clicking "Open a VCF File" in the Control Panel: </label>
+      <br /><strong>Note that an exome VCF will take around 30 seconds on modern hardware, and will require a few GB of temporary storage.</strong>
+
+        <ol class="nya-bs-select form-control btn-primary" ng-model="formData.processVCF">
+          <li nya-bs-option="vcffile in vcffiles" data-value="vcffile.name">
+            <a>
+              <span class="text-warning">{{vcffile.name}}</span>
+              <span class="glyphicon glyphicon-ok check-mark"></span>
+            </a>
+          </li>
+        </ol>
+    </div>
+
+      <button type="submit" class="btn btn-success" ng-disabled="isLoadingVCF">
+        <span data-ng-hide="isLoadingVCF">Load VCF</span>
+        <span data-ng-show="isLoadingVCF">Loading VCF...&nbsp;&nbsp;<i class="fa fa-spinner fa-spin"></i></span>
+      </button>
+
+
+    </form>
+  </div>
