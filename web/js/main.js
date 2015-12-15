@@ -37,6 +37,21 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
   })
 
+  .state('content.about', {
+    url: '/about',
+    templateUrl: 'content-info.html#about'
+  })
+
+  .state('content.contact', {
+    url: '/contact',
+    templateUrl: 'content-info.html#contact'
+  })
+
+  .state('content.faq', {
+    url: '/faq',
+    templateUrl: 'content-info.html#faq'
+  })
+
   $urlRouterProvider.otherwise('/content/vcfload');
 
 
