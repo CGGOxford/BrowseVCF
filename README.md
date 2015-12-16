@@ -33,7 +33,7 @@ BrowseVCF is available under the [GPL v3] license.
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
 
-   [GPL v3]: <http://www.gnu.org/licenses/gpl-3.0.en.html>
+   [GPL v3]: http://www.gnu.org/licenses/gpl-3.0.en.html
 
 
 
