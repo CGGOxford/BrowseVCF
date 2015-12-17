@@ -6,7 +6,7 @@ BrowseVCF is a web-based application and workflow to quickly prioritise disease-
 Download the .zip file at the bottom of this page, unzip it somewhere, and double-click on launcher-windows.bat in the web directory. This version is shipped with a stripped-down WinPython v2.7.10, and pre-compiled wormtable modules. Tested on Windows 7.
 
 ##### *GNU/Linux-specific notes*
-Download the .tar.gz file at the bottom of this page, extract it and launch the application. You should have a Python 2.7 install along with the wormtable package (>= 0.1.5a1).
+Download the .tar.gz file at the bottom of this page, extract it and launch the application. You should have a Python 2.7 install along with the wormtable package (>= 0.1.5a2).
 
 ### Usage as stand-alone web application
 BrowseVCF used as web application is composed of four steps:
