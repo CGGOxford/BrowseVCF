@@ -24,11 +24,11 @@ angular.module('btford.markdown', ['ngSanitize']).
       link: function (scope, element, attrs) {
         if (attrs.btfMarkdown) {
           scope.$watch(attrs.btfMarkdown, function (newVal) {
-            var html = newVal ? $sanitize(markdownConverter.makeHtml(newVal)) : '';
+            var html = newVal ? markdownConverter.makeHtml(newVal) : '';
             element.html(html);
           });
         } else {
-          var html = $sanitize(markdownConverter.makeHtml(element.text()));
+          var html = markdownConverter.makeHtml(element.text());
           element.html(html);
         }
       }

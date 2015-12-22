@@ -1,4 +1,6 @@
-# <a id="about"></a> About BrowseVCF
+About BrowseVCF
+================
+
 BrowseVCF is a web-based application and workflow to quickly prioritise disease-causative variants in VCF files.
 
 ### Installation
@@ -23,7 +25,9 @@ The folder "scripts" contains the key set of Python scripts that perform the sam
 $ python script_name.py --help
 ```
 
-# <a id="contact"></a> Contact and Contribute!
+Contact and Contribute!
+=======================
+
 Want to contribute? Great! Simply report a new issue on GitHub or write an email to:
 - Silvia Salatino: silvia (AT) well (DOT) ox (DOT) ac (DOT) uk
 - Varun Ramraj: varun (AT) well (DOT) ox (DOT) ac (DOT) uk
@@ -31,7 +35,9 @@ Want to contribute? Great! Simply report a new issue on GitHub or write an email
 ### License
 BrowseVCF is available under the [GPL v3] license.
 
-# <a id="faq"></a> FAQ
+FAQ
+====
+
 FAQ goes here.
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
