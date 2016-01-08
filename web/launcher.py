@@ -106,7 +106,7 @@ if __name__ == '__main__':
 
     app = GUIApp()
 
-    app.master.title('OGC VCF Toolkit Control Panel')
+    app.master.title('BrowseVCF Control Panel')
 
 
     #while True:
