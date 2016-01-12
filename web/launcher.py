@@ -40,8 +40,11 @@ class GUIApp(tk.Frame):
         sys.stderr.write('Chosen %s\n' % VCFFILENAME)
 
         curfiles = []
-        with open(VCFSTORAGEFILE, 'r') as jsonfile:
-            curfiles = json.load(jsonfile)
+        try:
+            with open(VCFSTORAGEFILE, 'r') as jsonfile:
+                curfiles = json.load(jsonfile)
+        except: #vcfHistory.json doesn't exist, or something else went wrong
+            curfiles = []
 
         myval = {"name": VCFFILENAME}
 
