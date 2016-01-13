@@ -11,13 +11,14 @@ import json #to read/write json
 import helpers #local helper functions such as cross-platform 'wc'
 
 #ugly hack to import from sibling, but it works
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOTPATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, ROOTPATH)
 
 #DEBUG
 #sys.stderr.write('%s\n' % sys.path)
 
 SCRIPTPATH = os.path.join(os.path.dirname(os.getcwd()), "scripts")
-TEMPLOC = os.path.join(os.path.dirname(os.getcwd()), "tmp")
+TEMPLOC = os.path.join(ROOTPATH, "tmp")
 
 WIN_PLATFORM_NONFREE = False
 

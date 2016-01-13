@@ -12,14 +12,15 @@ import json #to read/write json
 import multiprocessing #manage cores
 
 #ugly hack to import from sibling, but it works
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOTPATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, ROOTPATH)
 
 #use the API call to avoid a system call!
 from scripts.script02_convert_to_wt import script02_api_call
 from scripts.script02_convert_to_wt import get_total_variant_count
 
 SCRIPTPATH = os.path.join(os.path.dirname(os.getcwd()), "scripts")
-TEMPLOC = os.path.join(os.path.dirname(os.getcwd()), "tmp")
+TEMPLOC = os.path.join(ROOTPATH, "tmp")
 
 WIN_PLATFORM_NONFREE = False
 

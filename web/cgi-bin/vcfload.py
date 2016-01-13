@@ -11,7 +11,8 @@ import xml.etree.ElementTree as ET #to parse schema XML files
 import json #to read/write json
 
 #ugly hack to import from sibling, but it works
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOTPATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, ROOTPATH)
 
 #DEBUG
 #sys.stderr.write('%s\n' % sys.path)
@@ -20,7 +21,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.script01_preprocess import script01_api_call
 
 SCRIPTPATH = os.path.join(os.path.dirname(os.getcwd()), "scripts")
-TEMPLOC = os.path.join(os.path.dirname(os.getcwd()), "tmp")
+TEMPLOC = os.path.join(ROOTPATH, "tmp")
 
 WIN_PLATFORM_NONFREE = False
 
