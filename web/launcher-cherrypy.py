@@ -43,7 +43,7 @@ myconfig = {
         # URL for directory with Python-CGI files
         "tools.cgiserver.base_url": "/cgi-bin",
         # Connect Python extension with Python interpreter program
-        "tools.cgiserver.handlers": {".py": "/usr/bin/python"},
+        "tools.cgiserver.handlers": {".py": "python"},
     }
 
 }
