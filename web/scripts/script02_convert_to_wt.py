@@ -4,6 +4,10 @@ import sys
 import glob
 import argparse
 import platform
+try:
+    import psutil
+except ImportError:
+    pass #move on quietly
 import multiprocessing
 from subprocess import Popen, PIPE
 from datetime import datetime
@@ -158,7 +162,14 @@ def create_all_wormtables(inp_file, out_folder, cores = 0):
 
   all_schema_files = glob.glob(out_folder + '/*.xml')
   # use all cores if default value is set
-  allcores = multiprocessing.cpu_count()
+  #update: use psutil if possible
+  try:
+    allcores = psutil.NUM_CPUS
+  except AttributeError: #windows has a function call
+    allcores = psutil.cpu_count()
+  except:
+    allcores = multiprocessing.cpu_count()
+
   if cores == 0 or cores > allcores:
     cores = allcores
   # if core count < 0, then set it to one core
@@ -198,14 +209,26 @@ def add_one_rowid_index(wt_path):
   wt.wtadmin_main(runargs.split())
   return
 
-def add_all_rowid_indexes(inp_file, out_folder):
+def add_all_rowid_indexes(inp_file, out_folder, cores = 0):
   """
   Add the 'row_id' index to all wormtables in out_folder. To speed up the
   process, use multi-threading on all available cores of the current machine.
   """
 
   all_wormtables = glob.glob(out_folder + '/*.wt')
-  cores = multiprocessing.cpu_count()
+  # use all cores if default value is set
+  #update: use psutil if possible
+  try:
+    allcores = psutil.NUM_CPUS
+  except AttributeError: #windows has a function call
+    allcores = psutil.cpu_count()
+  except:
+    allcores = multiprocessing.cpu_count()
+  if cores == 0 or cores > allcores:
+    cores = allcores
+  # if core count < 0, then set it to one core
+  elif cores < 0:
+    cores = 1
   chunks = make_chunks(all_wormtables, cores)
   results = list()
   for chunk in chunks:
@@ -277,4 +300,3 @@ def main():
 
 if __name__ == '__main__':
   main()
-
