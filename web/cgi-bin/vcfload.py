@@ -38,9 +38,6 @@ if "processVCF" in query.keys():
     if WIN_PLATFORM_NONFREE:
         curDir = curDir.replace('\\', '\\\\')
 
-    #print header, not required for CherryPy
-    #print """Content-type: application/json\r\n"""
-
     #run the API call for preprocessing
     with helpers.no_console_output():
         (availsamples, NOFILTERB) = script01_api_call(fname, curDir)
@@ -68,7 +65,12 @@ if "processVCF" in query.keys():
     myfields2['availsamples'] = availsamples
 
     #return number of cores on system minus one
-    nCores = psutil.NUM_CPUS - 1
+    nCores = 1
+
+    try:
+    	nCores = psutil.cpu_count()
+    except:
+    	nCores = psutil.NUM_CPUS
 
     if nCores < 1:
         nCores = 1
@@ -79,4 +81,5 @@ if "processVCF" in query.keys():
     availfields_str = json.dumps(myfields2, encoding="utf-8")
 
     #write out the JSON response
+    print """Content-type: application/json\r\n"""
     print """%s""" % availfields_str

@@ -113,5 +113,5 @@ if 'remFilename' in query.keys():
     returnvals['newPrevFile'] = outFile
 
     #return JSON-formatted output
-    #print '''Content-type: application/json\r\n'''
+    print '''Content-type: application/json\r\n'''
     print '''%s\r\n''' % json.dumps(returnvals)

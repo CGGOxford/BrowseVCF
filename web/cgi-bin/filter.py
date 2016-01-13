@@ -255,5 +255,5 @@ if "whichFilter" in query.keys():
             pass
 
     #print return values in JSON format
-    #print """Content-type: application/json\r\n"""
+    print """Content-type: application/json\r\n"""
     print """%s\r\n""" % json.dumps(returnvals)

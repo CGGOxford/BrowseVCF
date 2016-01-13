@@ -50,7 +50,12 @@ if "selval[]" in query.keys():
         if numCores is None or numCores == '':
             numCores = 1
 
-        nCores = psutil.NUM_CPUS 
+        nCores = 1
+
+    	try:
+    	    nCores = psutil.cpu_count()
+    	except:
+    	    nCores = psutil.NUM_CPUS
 
         if numCores >= str(nCores) or numCores == '0':
             numCores = str(nCores - 1)
@@ -75,26 +80,26 @@ if "selval[]" in query.keys():
     curDir = query.getvalue('OGCWOrkingDir')
 
     #TODO: os.path.join() this
-    if WIN_PLATFORM_NONFREE:
-        curDir = curDir.replace('\\', '\\\\')
+    #if WIN_PLATFORM_NONFREE:
+    #    curDir = curDir.replace('\\', '\\\\')
 
     #default input file created by script 1 in the previous step (vcfload.py)
     inpfile = 'pre_processed_inp_file.vcf.gz'
 
     #suppress output, if any, and run API call
-    with helpers.no_console_output():
-        script02_api_call(os.path.join(curDir, inpfile),
+    #with helpers.no_console_output():
+    script02_api_call(os.path.join(curDir, inpfile),
                                     curDir, inputfields, numCores)
 
     #append the latest indexed fields to our parsed-fields tracker file
-    with open('%s/indexedfields.txt' % curDir, 'a') as offf:
+    with open(os.path.join(curDir, 'indexedfields.txt'), 'a') as offf:
         for f in ifields:
             offf.write('%s\n' % f)
 
     #read the fields back in for json return value
     retfields = []
     availSamples = [] #populate if a GT wormtable is created for the sample
-    with open('%s/indexedfields.txt' % curDir, 'r') as ifff:
+    with open(os.path.join(curDir, 'indexedfields.txt'), 'r') as ifff:
         for line in ifff:
             lne = line.strip()
             if lne not in retfields:
@@ -108,8 +113,11 @@ if "selval[]" in query.keys():
     returnvals['indexedfields'] = retfields
     returnvals['availsamples_filterb'] = availSamples
 
-    #get total count with wormtable helper function in script 2
-    returnvals['totalvariants'] = get_total_variant_count(curDir)
+    try:
+    	#get total count with wormtable helper function in script 2
+    	returnvals['totalvariants'] = get_total_variant_count(curDir)
+    except:
+    	returnvals['totalvariants'] = "ERRORORORORRRORORRR!"
 
     if len(availSamples) < 1:
         returnvals['nofilterb'] = True
@@ -119,5 +127,5 @@ if "selval[]" in query.keys():
     jsonreturn = json.dumps(returnvals)
 
     #print out the JSON return value
-    #print """Content-type: application/json\r\n"""
+    print """Content-type: application/json\r\n"""
     print """%s\r\n""" % jsonreturn

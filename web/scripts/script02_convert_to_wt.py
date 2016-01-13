@@ -276,7 +276,7 @@ def get_total_variant_count(out_folder):
   Get the total (initial) number of variants.
   """
 
-  tbl = wt.open_table(out_folder + '/schema.wt')
+  tbl = wt.open_table(os.path.join(out_folder, 'schema.wt'))
   return len(tbl)
 
 def script02_api_call(i_file, o_folder, u_fields, n_cores):

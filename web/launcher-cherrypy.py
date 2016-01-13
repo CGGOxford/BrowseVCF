@@ -6,6 +6,8 @@ import cherrypy
 import cpcgiserver
 import webbrowser
 import thread
+import multiprocessing
+import psutil #when multiprocessing doesn't work on CherryPy
 import threading
 import time
 import Tkinter as tk #GUI stuff
@@ -114,6 +116,7 @@ class ServeThread(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
+    	print "PROCS: %s" % os.environ.get('NUMBER_OF_PROCESSORS')
         app = cherrypy.Application(None, config=myconfig)
         cherrypy.quickstart(app, config=myconfig)
         cherrypy.engine.block()
@@ -130,6 +133,12 @@ def get_open_port():
     return portnum
 
 def main():
+
+    #if windows, set the number of processors so multiprocessing
+    #cpu_count() works properly
+    if os.environ.get('NUMBER_OF_PROCESSORS') is None:
+        print "FAILFAILFAIL"
+
     global PORTNUM
     global myconfig
 
