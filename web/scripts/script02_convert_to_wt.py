@@ -163,12 +163,16 @@ def create_all_wormtables(inp_file, out_folder, cores = 0):
   all_schema_files = glob.glob(out_folder + '/*.xml')
   # use all cores if default value is set
   #update: use psutil if possible
+  allcores = 1
   try:
     allcores = psutil.NUM_CPUS
   except AttributeError: #windows has a function call
     allcores = psutil.cpu_count()
   except:
-    allcores = multiprocessing.cpu_count()
+    try:
+      allcores = multiprocessing.cpu_count()
+    except NotImplementedError:
+      pass
 
   if cores == 0 or cores > allcores:
     cores = allcores
@@ -218,12 +222,17 @@ def add_all_rowid_indexes(inp_file, out_folder, cores = 0):
   all_wormtables = glob.glob(out_folder + '/*.wt')
   # use all cores if default value is set
   #update: use psutil if possible
+  allcores = 1
   try:
     allcores = psutil.NUM_CPUS
   except AttributeError: #windows has a function call
     allcores = psutil.cpu_count()
   except:
-    allcores = multiprocessing.cpu_count()
+    try:
+      allcores = multiprocessing.cpu_count()
+    except NotImplementedError:
+      pass
+
   if cores == 0 or cores > allcores:
     cores = allcores
   # if core count < 0, then set it to one core
