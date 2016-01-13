@@ -131,11 +131,18 @@ def get_open_port():
 
 def main():
     global PORTNUM
+    global myconfig
 
     try:
         PORTNUM = get_open_port()
     except:
         pass
+
+    print "ARGS: %s" % (sys.argv,)
+
+    if len(sys.argv) >= 2:
+    	myconfig['/cgi-bin']['tools.cgiserver.handlers'] = { '.py': sys.argv[-1] }
+	sys.stderr.write('BROWSEVCF CONFIGURATION\n%s\n' % sys.argv[-1]) 
 
     s = ServeThread(portnum = PORTNUM)
     s.daemon = True

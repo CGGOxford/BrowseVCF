@@ -3,4 +3,4 @@ SET PATH=%CD%;%PATH%
 SET PYTHONPATH=%CD%
 popd
 
-python launcher-cherrypy.py
+python launcher-cherrypy.py %PYTHONPATH%\python.exe
