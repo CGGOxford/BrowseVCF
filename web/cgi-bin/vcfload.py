@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import cgi
+import psutil #to get proper cpu counts with CherryPy
 import os, sys, platform, subprocess
 import tempfile #tempdirs and files
 import shutil #deleting tempdirs and files
@@ -67,7 +68,7 @@ if "processVCF" in query.keys():
     myfields2['availsamples'] = availsamples
 
     #return number of cores on system minus one
-    nCores = multiprocessing.cpu_count() - 1
+    nCores = psutil.NUM_CPUS - 1
 
     if nCores < 1:
         nCores = 1

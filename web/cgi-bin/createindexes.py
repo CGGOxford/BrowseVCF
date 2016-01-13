@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import cgi
+import psutil #to get proper cpu counts with CherryPy
 import os, sys, platform, subprocess
 import tempfile #tempdirs and files
 import shutil #deleting tempdirs and files
@@ -49,7 +50,7 @@ if "selval[]" in query.keys():
         if numCores is None or numCores == '':
             numCores = 1
 
-        nCores = multiprocessing.cpu_count()
+        nCores = psutil.NUM_CPUS 
 
         if numCores >= str(nCores) or numCores == '0':
             numCores = str(nCores - 1)
