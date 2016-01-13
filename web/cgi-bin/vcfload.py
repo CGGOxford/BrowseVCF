@@ -27,7 +27,6 @@ WIN_PLATFORM_NONFREE = False
 
 if 'win' in platform.system().lower():
     WIN_PLATFORM_NONFREE = True
-    TEMPLOC = os.getcwd() + "\\tmp\\"
 
 query = cgi.FieldStorage()
 
