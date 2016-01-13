@@ -12,7 +12,7 @@ import json #to read/write json
 import multiprocessing #manage cores
 
 #ugly hack to import from sibling, but it works
-sys.path.insert(0, os.path.dirname(os.path.abspath(os.getcwd())))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 #use the API call to avoid a system call!
 from scripts.script02_convert_to_wt import script02_api_call

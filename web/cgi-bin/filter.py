@@ -11,7 +11,7 @@ import json #to read/write json
 import helpers #local helper functions such as cross-platform 'wc'
 
 #ugly hack to import from sibling, but it works
-sys.path.insert(0, os.path.dirname(os.path.abspath(os.getcwd())))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 #DEBUG
 #sys.stderr.write('%s\n' % sys.path)
