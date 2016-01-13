@@ -18,6 +18,7 @@ VCFFILENAME = '' #set by the open dialog
 
 VCFSTORAGEFILE = os.path.join(os.getcwd(), "js/vcfHistory.json")
 
+#seed a port number in case random portnum search doesn't work
 PORTNUM = 27013
 
 class GUIApp(tk.Frame):
