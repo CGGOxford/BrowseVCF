@@ -12,14 +12,14 @@ import json #to read/write json
 import multiprocessing #manage cores
 
 #ugly hack to import from sibling, but it works
-sys.path.insert(0, os.path.abspath(os.getcwd()))
+sys.path.insert(0, os.path.dirname(os.path.abspath(os.getcwd())))
 
 #use the API call to avoid a system call!
 from scripts.script02_convert_to_wt import script02_api_call
 from scripts.script02_convert_to_wt import get_total_variant_count
 
-SCRIPTPATH = os.path.join(os.getcwd(), "scripts")
-TEMPLOC = os.path.join(os.getcwd(), "tmp")
+SCRIPTPATH = os.path.join(os.path.dirname(os.getcwd()), "scripts")
+TEMPLOC = os.path.join(os.path.dirname(os.getcwd()), "tmp")
 
 WIN_PLATFORM_NONFREE = False
 
@@ -117,5 +117,5 @@ if "selval[]" in query.keys():
     jsonreturn = json.dumps(returnvals)
 
     #print out the JSON return value
-    print """Content-type: application/json\r\n"""
+    #print """Content-type: application/json\r\n"""
     print """%s\r\n""" % jsonreturn

@@ -11,13 +11,13 @@ import json #to read/write json
 import helpers #local helper functions such as cross-platform 'wc'
 
 #ugly hack to import from sibling, but it works
-sys.path.insert(0, os.path.abspath(os.getcwd()))
+sys.path.insert(0, os.path.dirname(os.path.abspath(os.getcwd())))
 
 #DEBUG
 #sys.stderr.write('%s\n' % sys.path)
 
-SCRIPTPATH = os.path.join(os.getcwd(), "scripts")
-TEMPLOC = os.path.join(os.getcwd(), "tmp")
+SCRIPTPATH = os.path.join(os.path.dirname(os.getcwd()), "scripts")
+TEMPLOC = os.path.join(os.path.dirname(os.getcwd()), "tmp")
 
 WIN_PLATFORM_NONFREE = False
 
@@ -254,5 +254,5 @@ if "whichFilter" in query.keys():
             pass
 
     #print return values in JSON format
-    print """Content-type: application/json\r\n"""
+    #print """Content-type: application/json\r\n"""
     print """%s\r\n""" % json.dumps(returnvals)

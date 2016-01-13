@@ -11,16 +11,16 @@ import xml.etree.ElementTree as ET #to parse schema XML files
 import json #to read/write json
 
 #ugly hack to import from sibling, but it works
-sys.path.insert(0, os.path.abspath(os.getcwd()))
+sys.path.insert(0, os.path.dirname(os.path.abspath(os.getcwd())))
 
 #DEBUG
-sys.stderr.write('%s\n' % sys.path)
+#sys.stderr.write('%s\n' % sys.path)
 
 #use the API call to avoid a system call!
 from scripts.script01_preprocess import script01_api_call
 
-SCRIPTPATH = os.path.join(os.getcwd(), "scripts")
-TEMPLOC = os.path.join(os.getcwd(), "tmp")
+SCRIPTPATH = os.path.join(os.path.dirname(os.getcwd()), "scripts")
+TEMPLOC = os.path.join(os.path.dirname(os.getcwd()), "tmp")
 
 WIN_PLATFORM_NONFREE = False
 
@@ -37,8 +37,8 @@ if "processVCF" in query.keys():
     if WIN_PLATFORM_NONFREE:
         curDir = curDir.replace('\\', '\\\\')
 
-    #print header
-    print """Content-type: application/json\r\n"""
+    #print header, not required for CherryPy
+    #print """Content-type: application/json\r\n"""
 
     #run the API call for preprocessing
     with helpers.no_console_output():
