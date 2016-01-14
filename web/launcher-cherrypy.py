@@ -134,11 +134,6 @@ def get_open_port():
 
 def main():
 
-    #if windows, set the number of processors so multiprocessing
-    #cpu_count() works properly
-    if os.environ.get('NUMBER_OF_PROCESSORS') is None:
-        print "FAILFAILFAIL"
-
     global PORTNUM
     global myconfig
 
