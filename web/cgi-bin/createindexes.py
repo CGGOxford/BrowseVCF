@@ -128,4 +128,4 @@ if "selval[]" in query.keys():
 
     #print out the JSON return value
     #print """Content-type: application/json\r\n"""
-    print """%s\r\n""" % jsonreturn
+    print """%s""" % jsonreturn

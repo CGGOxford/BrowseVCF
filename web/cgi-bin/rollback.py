@@ -114,4 +114,4 @@ if 'remFilename' in query.keys():
 
     #return JSON-formatted output
     #print '''Content-type: application/json\r\n'''
-    print '''%s\r\n''' % json.dumps(returnvals)
+    print """%s""" % json.dumps(returnvals)
