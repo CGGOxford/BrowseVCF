@@ -117,7 +117,7 @@ if "selval[]" in query.keys():
     	#get total count with wormtable helper function in script 2
     	returnvals['totalvariants'] = get_total_variant_count(curDir)
     except:
-    	returnvals['totalvariants'] = "ERRORORORORRRORORRR!"
+    	returnvals['totalvariants'] = "CANNOT DETERMINE!"
 
     if len(availSamples) < 1:
         returnvals['nofilterb'] = True

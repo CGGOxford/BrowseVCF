@@ -81,11 +81,16 @@ if 'remFilename' in query.keys():
     #Bootstrap UI-Grid doesn't like full stops in the field name
     #for some reason...edit here
     for header in outheader:
-        outheadermap.append({
+        myfields = {
             'field': header.replace('.', '_'),
             'displayName': header,
             'width': '150'
-        })
+        }
+
+        if header == 'row_id': #hide row_id column
+            myfields['visible'] = False
+
+        outheadermap.append(myfields)
 
 
     returnvals['outheadermap'] = outheadermap

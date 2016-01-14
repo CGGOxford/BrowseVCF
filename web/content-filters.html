@@ -194,6 +194,7 @@
     <h3 class="text-center text-warning">
       Filter History
       <p class="text-muted small">Total variants: {{ totalvariants }}</p>
+
     </h3>
 
     <div class="list-group">
@@ -231,6 +232,8 @@
         </div>
         <div class="grid m-b-20" ui-grid="parseresults" ui-grid-move-columns ui-grid-resize-columns ui-grid-auto-resize ui-grid-pinning ui-grid-selection ui-grid-grouping ui-grid-infinite-scroll>
         </div>
+
+        {{ parseresults.columnDefs }}
 
       </div>
     </div>

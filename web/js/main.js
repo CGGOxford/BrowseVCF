@@ -124,13 +124,13 @@ app.controller('VCFFilterController', function($scope, $sce, $state, $sessionSto
     $scope.totalvariants = 0;
 
     //seed a value
-    $scope.vcffiles = [{"name": "/home/varun/Projects/bsg_github/varun/vcf_filtering_ui/web/exome_variants.vcf.gz"}];
+    $scope.vcffiles = [{"name": "/path/to/myvcf.vcf.gz"}];
 
     //load vcf filenames from JSON
     $http.get('js/vcfHistory.json').then(function(res) {
 
         $scope.vcffiles = res.data;
-        $scope.formData.processVCF = $scope.vcffiles[$scope.vcffiles.length - 1].name; //name in textbox
+        $scope.formData.processVCF = $scope.vcffiles[$scope.vcffiles.length - 1].name; //name added to dropdown
 
     });
 
@@ -145,8 +145,8 @@ app.controller('VCFFilterController', function($scope, $sce, $state, $sessionSto
     /* Save the history array to a text file */
     $scope.saveHistory = function() {
 
-        var histBlob = new Blob([JSON.stringify($scope.filterHistory, null, 2).replace(/[{}\[\]]/g, "")], {type: "text/plain; charset=utf-8"});
-
+        //var histBlob = new Blob([JSON.stringify($scope.filterHistory, null, 2).replace(/[{}\[\]]/g, "")], {type: "text/plain; charset=utf-8"});
+        var histBlob = new Blob([JSON.stringify($scope.filterHistory, null, 2)], {type: "text/plain; charset=utf-8"});
         saveAs(histBlob, "ogc_vcf_history.txt");
 
     }

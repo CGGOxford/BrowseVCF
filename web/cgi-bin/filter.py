@@ -218,11 +218,15 @@ if "whichFilter" in query.keys():
     #Bootstrap UI-Grid doesn't like full stops in the field name for
     #some reason...edit name here
     for header in outheader:
-        outheadermap.append({
+        myfields = {
             'field': header.replace('.', '_'),
             'displayName': header,
             'width': '150'
-        })
+        }
+        if header == 'row_id': #hide row_id column
+            myfields['visible'] = False
+
+        outheadermap.append(myfields)
 
     # set up data structures for output and return a JSON document
     returnvals = {}
