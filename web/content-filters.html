@@ -57,7 +57,7 @@
         <uib-accordion-group is-open="false" is-disabled="nofilterb" id="opt_b">
           <uib-accordion-heading>
             <span ng-if="nofilterb == false" ng-click="setFilter('opt_b')">B) Get variants with a given genotype in one, some or all samples</span>
-            <span ng-if="nofilterb == true">B) Get variants with a given genotype in one, some or all samples (filter disabled; no sample genotypes found in VCF or no *.GT wormtables generated)</span>
+            <span class="text-danger" ng-if="nofilterb == true">B) Get variants with a given genotype in one, some or all samples (filter disabled; no sample genotypes found in VCF or no *.GT wormtables generated)</span>
           </uib-accordion-heading>
           <div class="divstyle">
             <p class="tabtab">
