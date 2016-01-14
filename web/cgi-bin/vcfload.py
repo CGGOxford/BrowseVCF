@@ -81,5 +81,5 @@ if "processVCF" in query.keys():
     availfields_str = json.dumps(myfields2, encoding="utf-8")
 
     #write out the JSON response
-    print """Content-type: application/json\r\n"""
+    #print """Content-type: application/json\r\n"""
     print """%s""" % availfields_str

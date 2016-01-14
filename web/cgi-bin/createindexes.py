@@ -127,5 +127,5 @@ if "selval[]" in query.keys():
     jsonreturn = json.dumps(returnvals)
 
     #print out the JSON return value
-    print """Content-type: application/json\r\n"""
+    #print """Content-type: application/json\r\n"""
     print """%s\r\n""" % jsonreturn
