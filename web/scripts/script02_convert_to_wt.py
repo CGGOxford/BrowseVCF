@@ -159,8 +159,16 @@ def create_all_wormtables(inp_file, out_folder, cores = 0):
   To speed up the process, use multi-threading on all available cores of the
   current machine.
   """
+  all_schema_files = []
 
-  all_schema_files = glob.glob(out_folder + '/*.xml')
+  allfiles = glob.glob(out_folder + '/*.xml')
+  allwts = glob.glob(out_folder + '/*.wt')
+
+  #only add filenames if a corresponding wt does not already exist!
+  for fname in allfiles:
+    if fname.replace('schema_', '').replace('.xml', '.wt') not in allwts:  
+      all_schema_files.append(fname)
+
   # use all cores if default value is set
   #update: use psutil if possible
   allcores = 1
@@ -197,7 +205,8 @@ def create_all_wormtables(inp_file, out_folder, cores = 0):
       print exc
       sys.exit()
     pool.join()
-  return
+
+  return all_schema_files
 
 def add_one_rowid_index(wt_path):
   """
@@ -213,13 +222,16 @@ def add_one_rowid_index(wt_path):
   wt.wtadmin_main(runargs.split())
   return
 
-def add_all_rowid_indexes(inp_file, out_folder, cores = 0):
+def add_all_rowid_indexes(inp_file, out_folder, all_schema_files, cores = 0):
   """
   Add the 'row_id' index to all wormtables in out_folder. To speed up the
   process, use multi-threading on all available cores of the current machine.
   """
 
-  all_wormtables = glob.glob(out_folder + '/*.wt')
+  all_wormtables = []
+  for wtname in all_schema_files:
+    all_wormtables.append(wtname.replace('schema_', '').replace('.xml', '.wt'))
+  
   # use all cores if default value is set
   #update: use psutil if possible
   allcores = 1
@@ -259,6 +271,9 @@ def add_chrompos_index(out_folder):
   Add the 'CHROM+POS' index to the wormtable 'CHROM+POS.wt'.
   """
 
+  if os.path.exists(os.path.join(out_folder, 'CHROM+POS.wt')):
+    return
+
   cachesize = '16G '
   divider = '/'
   if WIN_PLATFORM_NONFREE:
@@ -292,8 +307,8 @@ def script02_api_call(i_file, o_folder, u_fields, n_cores):
   user_fields = u_fields
   schema_file = out_folder + '/' + 'schema.xml'
   create_single_field_schemas(schema_file, user_fields)
-  create_all_wormtables(inp_file, out_folder, cores = int(n_cores))
-  add_all_rowid_indexes(inp_file, out_folder)
+  all_schema_files = create_all_wormtables(inp_file, out_folder, cores = int(n_cores))
+  add_all_rowid_indexes(inp_file, out_folder, all_schema_files)
   add_chrompos_index(out_folder)
   t2 = datetime.now()
   return
