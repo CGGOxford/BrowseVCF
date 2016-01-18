@@ -242,7 +242,10 @@ app.controller('VCFFilterController', function($scope, $sce, $state, $sessionSto
 
           $scope.totalvariants = success.totalvariants;
 
-          $scope.filterHistory.push({'Total starting variants': success.totalvariants, 'actionNumber': -1})
+          if ($scope.filterHistory.length < 1)
+          {
+            $scope.filterHistory.push({'Total starting variants': success.totalvariants, 'actionNumber': -1});
+          }
 
           //move the wizard along to the next state
           $state.go('content.filters');
