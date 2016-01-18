@@ -112,6 +112,32 @@ app.controller('VCFFilterController', function($scope, $sce, $state, $sessionSto
     $scope.opt_e_keyword_field = ['First Option', 'Second Option'];
     $scope.opt_e_genelist = ['G1', 'G2'];
 
+    //map field variable names to human-readable ones
+    $scope.field_name_map = {
+        'opt_a_operator': 'Operator',
+        'opt_a_cutoff': 'Cutoff',
+        'opt_a_field_to_filter_variants': 'Chosen field for filtering',
+        'opt_a_keep_none_variants': 'Keep variants having no value in the selected field',
+
+        'opt_b_genotype': 'Genotype',
+        'opt_b_sample': 'Sample',
+
+        'opt_c_chromosome': 'Chromosome',
+        'opt_c_start_pos': 'Start position',
+        'opt_c_end_pos': 'End position',
+
+        'opt_d_variant_type': 'Variant type',
+
+        'opt_e_keyword_field': 'Field Name',
+        'opt_e_genelist': 'List of input genes',
+        'opt_e_negative_query': 'Genes excluded instead of included',
+
+        'numresults': 'Number of variants found',
+        'filterused': 'Filter Name',
+        'startvar': 'Total number of starting variants'
+
+    };
+
     $scope.myfields = [];
 
     //results of parsing...used to populate the results table
@@ -146,7 +172,44 @@ app.controller('VCFFilterController', function($scope, $sce, $state, $sessionSto
     $scope.saveHistory = function() {
 
         //var histBlob = new Blob([JSON.stringify($scope.filterHistory, null, 2).replace(/[{}\[\]]/g, "")], {type: "text/plain; charset=utf-8"});
-        var histBlob = new Blob([JSON.stringify($scope.filterHistory, null, 2)], {type: "text/plain; charset=utf-8"});
+        var outputHistory = [];
+
+        for (var i = 0; i < $scope.filterHistory.length; i++)
+        {
+          for (var k in $scope.filterHistory[i])
+          {
+             if (k != "actionNumber" && k != "$$hashKey")
+             {
+               if (k == "outfile")
+               {
+                 //extra new line ahead of next series of outputs, don't print outfile
+                 outputHistory.push("\n-------\n\nFilter " + i + ":\n");
+               }
+               else if (k == "inputdata") //cascade into this sub-map
+               {
+                  outputHistory.push("\nInput Data:\n");
+
+                  for (var kk in $scope.filterHistory[i][k])
+                  {
+                      outputHistory.push($scope.field_name_map[kk] + " --> " + $scope.filterHistory[i][k][kk]);
+                      outputHistory.push("\n");
+                  }
+
+               }
+               else
+               {
+                 outputHistory.push($scope.field_name_map[k] + " --> " + $scope.filterHistory[i][k]);
+               }
+
+               outputHistory.push("\n");  //new line
+             }
+          }
+        }
+
+        var histBlob = new Blob(outputHistory, {type: "text/plain; charset=utf-8"});
+
+
+
         saveAs(histBlob, "ogc_vcf_history.txt");
 
     }
@@ -244,7 +307,7 @@ app.controller('VCFFilterController', function($scope, $sce, $state, $sessionSto
 
           if ($scope.filterHistory.length < 1)
           {
-            $scope.filterHistory.push({'Total starting variants': success.totalvariants, 'actionNumber': -1});
+            $scope.filterHistory.push({'startvar': success.totalvariants, 'actionNumber': -1});
           }
 
           //move the wizard along to the next state
