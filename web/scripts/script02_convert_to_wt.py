@@ -270,9 +270,11 @@ def add_chrompos_index(out_folder):
   """
   Add the 'CHROM+POS' index to the wormtable 'CHROM+POS.wt'.
   """
-
-  if os.path.exists(os.path.join(out_folder, 'CHROM+POS.wt')):
-    return
+  
+  # Turning this off for now, since it's not much overhead
+  # and needs to be created the first time, which this check won't allow!
+  #if os.path.exists(os.path.join(out_folder, 'CHROM+POS.wt')):
+  #  return
 
   cachesize = '16G '
   divider = '/'
