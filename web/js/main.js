@@ -120,7 +120,7 @@ app.controller('VCFFilterController', function($scope, $sce, $state, $sessionSto
         'opt_a_keep_none_variants': 'Keep variants having no value in the selected field',
 
         'opt_b_genotype': 'Genotype',
-        'opt_b_sample': 'Sample',
+        'opt_b_sample[]': 'Samples',
 
         'opt_c_chromosome': 'Chromosome',
         'opt_c_start_pos': 'Start position',
@@ -191,7 +191,14 @@ app.controller('VCFFilterController', function($scope, $sce, $state, $sessionSto
 
                   for (var kk in $scope.filterHistory[i][k])
                   {
-                      outputHistory.push($scope.field_name_map[kk] + " --> " + $scope.filterHistory[i][k][kk]);
+                      if (kk == "opt_b_genotype")
+                      {
+                         outputHistory.push($scope.field_name_map[kk] + " --> " + $scope.opt_b_genotype[$scope.filterHistory[i][k][kk]]);
+                      }
+                      else
+                      {
+                         outputHistory.push($scope.field_name_map[kk] + " --> " + $scope.filterHistory[i][k][kk]);
+                      }
                       outputHistory.push("\n");
                   }
 
