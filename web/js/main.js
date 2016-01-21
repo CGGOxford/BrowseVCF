@@ -215,8 +215,6 @@ app.controller('VCFFilterController', function($scope, $sce, $state, $sessionSto
 
         var histBlob = new Blob(outputHistory, {type: "text/plain; charset=utf-8"});
 
-
-
         saveAs(histBlob, "ogc_vcf_history.txt");
 
     }

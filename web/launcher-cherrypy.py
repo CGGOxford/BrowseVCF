@@ -31,11 +31,14 @@ myconfig = {
         # Server settings
         "server.socket_host": "127.0.0.1",
         "server.socket_port": PORTNUM,
+        "engine.timeout_monitor.on": False,
+        "response.timeout": 15000000
     },
     "/":{
         "tools.staticdir.on": True,
         "tools.staticdir.dir": os.getcwd(),
-        "tools.staticdir.index": 'index.html'
+        "tools.staticdir.index": 'index.html',
+        "response.timeout": 15000000
     },
     "/cgi-bin": {
         # Enable CgiServer
@@ -46,9 +49,11 @@ myconfig = {
         "tools.cgiserver.base_url": "/cgi-bin",
         # Connect Python extension with Python interpreter program
         "tools.cgiserver.handlers": {".py": "python"},
+        "response.timeout": 15000000
     }
 
 }
+
 
 class GUIApp(tk.Frame):
     def __init__(self, master=None):
@@ -146,7 +151,7 @@ def main():
 
     if len(sys.argv) >= 2:
     	myconfig['/cgi-bin']['tools.cgiserver.handlers'] = { '.py': sys.argv[-1] }
-	sys.stderr.write('BROWSEVCF CONFIGURATION\n%s\n' % sys.argv[-1]) 
+	sys.stderr.write('BROWSEVCF CONFIGURATION\n%s\n' % sys.argv[-1])
 
     s = ServeThread(portnum = PORTNUM)
     s.daemon = True
