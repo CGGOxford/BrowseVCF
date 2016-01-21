@@ -234,6 +234,19 @@ if "whichFilter" in query.keys():
     #change filter name from "opt_x" to "Filter x"
     fname = 'Filter ' + fname[4].upper()
 
+    #pad out the filter name for the history list
+    if fname == 'Filter A':
+        fname = 'Filter A: Particular field'
+    elif fname == 'Filter B':
+        fname = 'Filter B: Genotype'
+    elif fname == 'Filter C':
+        fname = 'Filter C: Region of interest'
+    elif fname == 'Filter D':
+        fname = 'Filter D: Variant type'
+    elif fname == 'Filter E':
+        fname = 'Filter E: Gene list'
+
+
     returnvals['workingdir'] = curDir
     returnvals['filtervals'] = fname
     returnvals['inputdata'] = filtervals
