@@ -166,7 +166,7 @@ def create_all_wormtables(inp_file, out_folder, cores = 0):
 
   #only add filenames if a corresponding wt does not already exist!
   for fname in allfiles:
-    if fname.replace('schema_', '').replace('.xml', '.wt') not in allwts:  
+    if fname.replace('schema_', '').replace('.xml', '.wt') not in allwts:
       all_schema_files.append(fname)
 
   # use all cores if default value is set
@@ -231,7 +231,7 @@ def add_all_rowid_indexes(inp_file, out_folder, all_schema_files, cores = 0):
   all_wormtables = []
   for wtname in all_schema_files:
     all_wormtables.append(wtname.replace('schema_', '').replace('.xml', '.wt'))
-  
+
   # use all cores if default value is set
   #update: use psutil if possible
   allcores = 1
@@ -270,7 +270,7 @@ def add_chrompos_index(out_folder):
   """
   Add the 'CHROM+POS' index to the wormtable 'CHROM+POS.wt'.
   """
-  
+
   # Turning this off for now, since it's not much overhead
   # and needs to be created the first time, which this check won't allow!
   #if os.path.exists(os.path.join(out_folder, 'CHROM+POS.wt')):
@@ -283,7 +283,8 @@ def add_chrompos_index(out_folder):
       out_folder = out_folder.replace('\\', '\\\\')
       divider = '\\\\'
   #run wtadmin as a library function, no system calls!
-  runargs = 'add -q --cache-size=' + cachesize + out_folder + divider + \
+  #for now, force this index to run each time...
+  runargs = 'add -q --force --cache-size=' + cachesize + out_folder + divider + \
             'CHROM+POS.wt CHROM+POS'
   wt.wtadmin_main(runargs.split())
   return
