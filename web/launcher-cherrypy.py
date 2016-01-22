@@ -16,6 +16,10 @@ import json #to serialise js config
 
 import socket #to find an open port
 
+#websocket stuff
+from ws4py.server.cherrypyserver import WebSocketPlugin, WebSocketTool
+from ws4py.websocket import EchoWebSocket
+
 VCFFILENAME = '' #set by the open dialog
 
 VCFSTORAGEFILE = os.path.join(os.getcwd(), "js/vcfHistory.json")
@@ -32,7 +36,6 @@ myconfig = {
         "server.socket_host": "127.0.0.1",
         "server.socket_port": PORTNUM,
         "engine.timeout_monitor.on": False,
-        "response.timeout": 15000000
     },
     "/":{
         "tools.staticdir.on": True,
@@ -49,7 +52,9 @@ myconfig = {
         "tools.cgiserver.base_url": "/cgi-bin",
         # Connect Python extension with Python interpreter program
         "tools.cgiserver.handlers": {".py": "python"},
-        "response.timeout": 15000000
+        "tools.websocket.on": True,
+        "tools.websocket.handler_cls": EchoWebSocket
+
     }
 
 }
@@ -123,6 +128,9 @@ class ServeThread(threading.Thread):
     def run(self):
     	print "PROCS: %s" % os.environ.get('NUMBER_OF_PROCESSORS')
         app = cherrypy.Application(None, config=myconfig)
+        WebSocketPlugin(cherrypy.engine).subscribe()
+        cherrypy.tools.websocket = WebSocketTool()
+
         cherrypy.quickstart(app, config=myconfig)
         cherrypy.engine.block()
 
