@@ -123,9 +123,7 @@ class ServeThread(threading.Thread):
     def run(self):
     	print "PROCS: %s" % os.environ.get('NUMBER_OF_PROCESSORS')
         app = cherrypy.Application(None, config=myconfig)
-        WebSocketPlugin(cherrypy.engine).subscribe()
-        cherrypy.tools.websocket = WebSocketTool()
-
+        
         cherrypy.quickstart(app, config=myconfig)
         cherrypy.engine.block()
 
