@@ -68,9 +68,9 @@ if "processVCF" in query.keys():
     nCores = 1
 
     try:
-    	nCores = psutil.cpu_count()
+    	nCores = int(psutil.cpu_count()) - 1
     except:
-    	nCores = psutil.NUM_CPUS
+    	nCores = int(psutil.NUM_CPUS) - 1
 
     if nCores < 1:
         nCores = 1
