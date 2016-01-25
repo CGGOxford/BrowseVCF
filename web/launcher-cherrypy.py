@@ -52,9 +52,11 @@ myconfig = {
         "tools.cgiserver.base_url": "/cgi-bin",
         # Connect Python extension with Python interpreter program
         "tools.cgiserver.handlers": {".py": "python"},
+
+    },
+    "/socket.io": {
         "tools.websocket.on": True,
         "tools.websocket.handler_cls": EchoWebSocket
-
     }
 
 }
@@ -159,7 +161,8 @@ def main():
 
     if len(sys.argv) >= 2:
     	myconfig['/cgi-bin']['tools.cgiserver.handlers'] = { '.py': sys.argv[-1] }
-	sys.stderr.write('BROWSEVCF CONFIGURATION\n%s\n' % sys.argv[-1])
+
+	#sys.stderr.write('BROWSEVCF CONFIGURATION\n%s\n' % sys.argv[-1])
 
     s = ServeThread(portnum = PORTNUM)
     s.daemon = True

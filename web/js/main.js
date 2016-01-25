@@ -84,6 +84,16 @@ app.factory('myWebSocket', function(socketFactory) {
 
 });
 
+//set up polling every 15s
+function doPoll() {
+  $.post('/cgi-bin/vcfload.py', function(data) {
+      console.log('Refreshing...');
+      setTimeout(doPoll, 5000);
+  });
+}
+
+//doPoll();
+
 app.controller('VCFFilterController', function($scope, $sce, $state, $sessionStorage, $http, $window) {
 
     $scope.$storage = $sessionStorage;
