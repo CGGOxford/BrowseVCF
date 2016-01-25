@@ -1,4 +1,4 @@
-var app = angular.module("mainApp", ['ngStorage', 'ngAnimate', 'ui.bootstrap', 'nya.bootstrap.select', 'btford.markdown', 'btford.socket-io', 'ui.router', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.autoResize', 'ui.grid.moveColumns']);
+var app = angular.module("mainApp", ['ngStorage', 'ngAnimate', 'ui.bootstrap', 'nya.bootstrap.select', 'btford.markdown', 'ui.router', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.autoResize', 'ui.grid.moveColumns']);
 
 app.config(function($stateProvider, $urlRouterProvider) {
 
@@ -76,23 +76,6 @@ app.filter('startFrom', function() {
     return arr.slice(start);
   };
 });
-
-//websocket factory
-app.factory('myWebSocket', function(socketFactory) {
-
-  return socketFactory();
-
-});
-
-//set up polling every 15s
-function doPoll() {
-  $.post('/cgi-bin/vcfload.py', function(data) {
-      console.log('Refreshing...');
-      setTimeout(doPoll, 5000);
-  });
-}
-
-//doPoll();
 
 app.controller('VCFFilterController', function($scope, $sce, $state, $sessionStorage, $http, $window) {
 

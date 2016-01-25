@@ -16,10 +16,6 @@ import json #to serialise js config
 
 import socket #to find an open port
 
-#websocket stuff
-from ws4py.server.cherrypyserver import WebSocketPlugin, WebSocketTool
-from ws4py.websocket import EchoWebSocket
-
 VCFFILENAME = '' #set by the open dialog
 
 VCFSTORAGEFILE = os.path.join(os.getcwd(), "js/vcfHistory.json")
@@ -52,12 +48,9 @@ myconfig = {
         "tools.cgiserver.base_url": "/cgi-bin",
         # Connect Python extension with Python interpreter program
         "tools.cgiserver.handlers": {".py": "python"},
+        "tools.cgiserver.timeout_seconds": 1600000
 
     },
-    "/socket.io": {
-        "tools.websocket.on": True,
-        "tools.websocket.handler_cls": EchoWebSocket
-    }
 
 }
 
