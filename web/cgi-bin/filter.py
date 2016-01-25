@@ -9,6 +9,7 @@ import Cookie
 import xml.etree.ElementTree as ET #to parse schema XML files
 import json #to read/write json
 import helpers #local helper functions such as cross-platform 'wc'
+import cherrypy
 
 #ugly hack to import from sibling, but it works
 ROOTPATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -236,7 +237,7 @@ if "whichFilter" in query.keys():
 
     #pad out the filter name for the history list
     if fname == 'Filter A':
-        fname = 'Filter A: Particular field'
+        fname = 'Filter A: Chosen field (%s)' % (filtervals['opt_a_field_to_filter_variants'],)
     elif fname == 'Filter B':
         fname = 'Filter B: Genotype'
     elif fname == 'Filter C':
@@ -272,4 +273,7 @@ if "whichFilter" in query.keys():
 
     #print return values in JSON format
     #print """Content-type: application/json\r\n"""
+
+    #insert response headers in the beginning
+    returnvals.update(cherrypy.response.headers)
     print """%s""" % json.dumps(returnvals)
