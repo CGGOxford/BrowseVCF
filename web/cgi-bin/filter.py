@@ -90,8 +90,6 @@ if "whichFilter" in query.keys():
     else:
         outFile = "out" + str(outcount) + ".tsv"
 
-    syscall = ""
-
     # Filter A (Filter variants according to a given field)
     if 'a' in fname:
         keep_none_variants = False
@@ -251,9 +249,11 @@ if "whichFilter" in query.keys():
     returnvals['filtervals'] = fname
     returnvals['inputdata'] = filtervals
     returnvals['outfile'] = outFile
-    returnvals['syscall'] = syscall
     returnvals['prevfile'] = outFile
-    returnvals['tmpdirname'] = curDir[curDir.rfind('/')+1:]
+    if WIN_PLATFORM_NONFREE == False:
+        returnvals['tmpdirname'] = curDir[curDir.rfind('/')+1:]
+    else:
+        returnvals['tmpdirname'] = curDir[curDir.rfind('\\')+1:]
     returnvals['outheadermap'] = outheadermap
     returnvals['outtextmap'] = outtextmap
 
@@ -275,5 +275,4 @@ if "whichFilter" in query.keys():
     #print """Content-type: application/json\r\n"""
 
     #insert response headers in the beginning
-    returnvals.update(cherrypy.response.headers)
     print """%s""" % json.dumps(returnvals)
