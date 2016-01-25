@@ -246,7 +246,6 @@ if "whichFilter" in query.keys():
     elif fname == 'Filter E':
         fname = 'Filter E: Gene list'
 
-
     returnvals['workingdir'] = curDir
     returnvals['filtervals'] = fname
     returnvals['inputdata'] = filtervals
