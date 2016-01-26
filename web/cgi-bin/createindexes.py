@@ -128,4 +128,7 @@ if "selval[]" in query.keys():
 
     #print out the JSON return value
     #print """Content-type: application/json\r\n"""
-    print """%s""" % jsonreturn
+    
+    #HOTFIX: The '\n' before the response is required for Chromium/Chrome
+    #on Windows, and possibly Safari on Mac
+    print """\n%s""" % jsonreturn
