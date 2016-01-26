@@ -9,6 +9,7 @@ import Cookie
 import xml.etree.ElementTree as ET #to parse schema XML files
 import json #to read/write json
 import helpers #local helper functions such as cross-platform 'wc'
+import cherrypy
 
 #ugly hack to import from sibling, but it works
 ROOTPATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -88,8 +89,6 @@ if "whichFilter" in query.keys():
         outFile = "out0" + str(outcount) + ".tsv"
     else:
         outFile = "out" + str(outcount) + ".tsv"
-
-    syscall = ""
 
     # Filter A (Filter variants according to a given field)
     if 'a' in fname:
@@ -236,7 +235,7 @@ if "whichFilter" in query.keys():
 
     #pad out the filter name for the history list
     if fname == 'Filter A':
-        fname = 'Filter A: Particular field'
+        fname = 'Filter A: Chosen field (%s)' % (filtervals['opt_a_field_to_filter_variants'],)
     elif fname == 'Filter B':
         fname = 'Filter B: Genotype'
     elif fname == 'Filter C':
@@ -250,9 +249,11 @@ if "whichFilter" in query.keys():
     returnvals['filtervals'] = fname
     returnvals['inputdata'] = filtervals
     returnvals['outfile'] = outFile
-    returnvals['syscall'] = syscall
     returnvals['prevfile'] = outFile
-    returnvals['tmpdirname'] = curDir[curDir.rfind('/')+1:]
+    if WIN_PLATFORM_NONFREE == False:
+        returnvals['tmpdirname'] = curDir[curDir.rfind('/')+1:]
+    else:
+        returnvals['tmpdirname'] = curDir[curDir.rfind('\\')+1:]
     returnvals['outheadermap'] = outheadermap
     returnvals['outtextmap'] = outtextmap
 
@@ -272,4 +273,7 @@ if "whichFilter" in query.keys():
 
     #print return values in JSON format
     #print """Content-type: application/json\r\n"""
-    print """%s""" % json.dumps(returnvals)
+
+    #HOTFIX: The '\n' before the response is required for Chromium/Chrome
+    #on Windows, and possibly Safari on Mac
+    print """\n%s""" % json.dumps(returnvals)
