@@ -274,5 +274,6 @@ if "whichFilter" in query.keys():
     #print return values in JSON format
     #print """Content-type: application/json\r\n"""
 
-    #insert response headers in the beginning
-    print """%s""" % json.dumps(returnvals)
+    #HOTFIX: The '\n' before the response is required for Chromium/Chrome
+    #on Windows, and possibly Safari on Mac
+    print """\n%s""" % json.dumps(returnvals)

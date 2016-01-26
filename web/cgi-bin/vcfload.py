@@ -85,4 +85,6 @@ if "processVCF" in query.keys():
     #write out the JSON response
     #print """Content-type: application/json\r\n"""
 
+    #HOTFIX: The '\n' before the response is required for Chromium/Chrome
+    #on Windows, and possibly Safari on Mac
     print """\n%s""" % availfields_str
