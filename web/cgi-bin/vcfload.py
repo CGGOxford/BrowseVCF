@@ -11,6 +11,8 @@ import Cookie
 import xml.etree.ElementTree as ET #to parse schema XML files
 import json #to read/write json
 
+import cherrypy
+
 #ugly hack to import from sibling, but it works
 ROOTPATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOTPATH)
@@ -82,4 +84,5 @@ if "processVCF" in query.keys():
 
     #write out the JSON response
     #print """Content-type: application/json\r\n"""
-    print """%s""" % availfields_str
+
+    print """\n%s""" % availfields_str
