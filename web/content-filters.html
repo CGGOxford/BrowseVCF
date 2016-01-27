@@ -21,7 +21,7 @@
               <p class="tabtab">
                 <select class="element select small form-control" id="element_4" name="element_4" ng-model="formData.opt_a_field_to_filter_variants">
                   <option value="" selected hidden />
-                  <option ng-repeat="myval in opt_a_field_to_filter_variants" value="{{myval}}">{{myval}}</option>
+                  <option ng-repeat="myval in opt_a_field_to_filter_variants" value="{{myval}}" ng-bind="myval"></option>
                 </select>
             </div>
             </p>
@@ -32,7 +32,7 @@
               <p class="tabtab">
                 <select class="element select small form-control" id="element_5" name="element_5" ng_model="formData.opt_a_operator">
                   <option value="" selected hidden />
-                  <option ng-repeat="myval in opt_a_operator" value="{{myval}}">{{myval}}</option>
+                  <option ng-repeat="myval in opt_a_operator" value="{{myval}}" ng-bind="myval"></option>
                 </select>
             </div>
             </p>
@@ -67,7 +67,7 @@
               <p class="tabtab">
                 <select class="element select small form-control" id="element_11" name="element_11" ng-model="formData.opt_b_genotype">
                   <option value="" selected hidden />
-                  <option ng-repeat="(myk, myval) in opt_b_genotype" value="{{myk}}">{{myval}}</option>
+                  <option ng-repeat="(myk, myval) in opt_b_genotype" value="{{myk}}" ng-bind="myval"></option>
                 </select>
             </div>
             </p>
@@ -76,12 +76,16 @@
             </p>
             <div>
               <p class="tabtab">
-                <select class="element select small form-control" id="element_12" name="element_12" ng-model="formData.opt_b_sample" multiple>
-                  <option value="" selected hidden />
-                  <option ng-repeat="myval in opt_b_sample" value="{{myval}}">{{myval}}</option>
-                </select>
+                <ol class="nya-bs-select form-control btn-warning" ng-model="formData.opt_b_sample" data-live-search="true" data-size="5" data-selected-text-format="count>3" multiple>
+                  <li nya-bs-option="myval in opt_b_sample">
+                    <a>
+                      <span class="text-primary">{{ myval }}</span>
+                      <span class="glyphicon glyphicon-ok check-mark"></span>
+                    </a>
+                  </li>
+                </ol>
+              </p>
             </div>
-            </p>
           </div>
         </uib-accordion-group>
 
@@ -131,7 +135,7 @@
               <p class="tabtab">
                 <select class="element select small form-control" id="element_13" name="element_13" ng-model="formData.opt_d_variant_type">
                   <option value="" selected hidden />
-                  <option ng-repeat="myval in opt_d_variant_type" value="{{myval}}">{{myval}}</option>
+                  <option ng-repeat="myval in opt_d_variant_type" value="{{myval}}" ng-bind="myval"></option>
                 </select>
             </div>
             </p>
@@ -156,7 +160,7 @@
               <p class="tabtab">
                 <select class="element select small form-control" id="element_14" name="element_14" ng-model="formData.opt_e_keyword_field">
                   <option value="" selected hidden />
-                  <option ng-repeat="myval in opt_e_keyword_field" value="{{myval}}">{{myval}}</option>
+                  <option ng-repeat="myval in opt_e_keyword_field" value="{{myval}}" ng-bind="myval"></option>
                 </select>
             </div>
             </p>
