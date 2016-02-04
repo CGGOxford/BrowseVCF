@@ -84,28 +84,34 @@ def substitute_dots(line):
   Whenever a value in a subfield of the INFO field is '.', replace it with a
   '-1'.
   """
+  try:
+      line_s = line.strip('\n').split('\t')
+      info = {(item.split('=')[0] if item.find('=')!= -1
+    	else item):(item.split('=')[1] if item.find('=')!= -1
+    	else '-1') for item in line_s[7].split(';')}
 
-  line_s = line.strip('\n').split('\t')
-  info = {(item.split('=')[0] if item.find('=')!= -1 
-	else item):(item.split('=')[1] if item.find('=')!= -1 
-	else '-1') for item in line_s[7].split(';')}
+      for key in info:
+        values = list()
+        for val in info[key].split(','):
+          if val == '.':
+            values.append('-1')
+          else:
+            values.append(val)
+        info[key] = ','.join(values)
+      new_info = ''
+      for k in info:
+        new_info += k + '=' + info[k] + ';'
+      new_info = new_info[:-1]
+      new_line = '\t'.join([line_s[0], line_s[1], line_s[2], line_s[3], line_s[4],
+                            line_s[5], line_s[6], new_info]) + '\t' + \
+                 '\t'.join(line_s[8:]) + '\n'
+      return new_line
 
-  for key in info:
-    values = list()
-    for val in info[key].split(','):
-      if val == '.':
-        values.append('-1')
-      else:
-        values.append(val)
-    info[key] = ','.join(values)
-  new_info = ''
-  for k in info:
-    new_info += k + '=' + info[k] + ';'
-  new_info = new_info[:-1]
-  new_line = '\t'.join([line_s[0], line_s[1], line_s[2], line_s[3], line_s[4],
-                        line_s[5], line_s[6], new_info]) + '\t' + \
-             '\t'.join(line_s[8:]) + '\n'
-  return new_line
+  except:
+      #this VCF is mangled, or it isn't a VCF
+      return "This file is not properly formatted. Please check the \
+              documentation for the VCF format!"
+
 
 def split_CSQ_field(sub_fields, line):
   """
@@ -151,14 +157,21 @@ def parse_inp_file(inp_file, out_folder):
 
   samples = []
   NOFILTERB = False
+
   try:
     inp = gzip.open(inp_file)
+    inp.read(2) #will fail if not gzipped
+    inp.seek(0) #seek back
   except:
     inp = open(inp_file)
+
   out_file = out_folder + '/pre_processed_inp_file.vcf'
+
   if WIN_PLATFORM_NONFREE:
     out_file = out_folder + "\\pre_processed_inp_file.vcf"
+
   out = open(out_file, 'w')
+
   for line in inp:
     if line.startswith('#'):
       # process the header CSQ line
@@ -272,4 +285,3 @@ def main():
 
 if __name__ == '__main__':
   main()
-
