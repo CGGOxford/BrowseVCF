@@ -120,10 +120,10 @@ def filter_variants_from_previous_results(inp_folder, field_name, operator,
                 ids.add(row[row_id_idx])
             elif value.find('/') != -1:
               if operator == 'greater_than':
-                if value.split('/')[0] > float(cutoff):
+                if float(value.split('/')[0]) > float(cutoff):
                   ids.add(row[row_id_idx])
               elif operator == 'less_than':
-                if value.split('/')[0] < float(cutoff):
+                if float(value.split('/')[0]) < float(cutoff):
                   ids.add(row[row_id_idx])
             else:
               sys.stderr.write('\nError: ' + operator + ' incompatible with' +
@@ -219,10 +219,10 @@ def filter_variants(inp_folder, field_name, operator, cutoff, keep_novalue):
               ids.add(row[row_id_idx])
           elif value.find('/') != -1:
             if operator == 'greater_than':
-              if value.split('/')[0] > float(cutoff):
+              if float(value.split('/')[0]) > float(cutoff):
                 ids.add(row[row_id_idx])
             elif operator == 'less_than':
-              if value.split('/')[0] < float(cutoff):
+              if float(value.split('/')[0]) < float(cutoff):
                 ids.add(row[row_id_idx])
           else:
             sys.stderr.write('\nError: ' + operator + ' incompatible with' +
@@ -358,4 +358,3 @@ def main():
 
 if __name__ == '__main__':
   main()
-
