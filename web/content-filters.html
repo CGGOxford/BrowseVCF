@@ -231,7 +231,10 @@
           Tabular output area
         </h3>
         <div ng-if="numresults">
-          <strong>Found {{numresults}} results. I can only display the top 100 right now.</strong>
+          <strong>Found {{numresults}} results.</strong>
+        </div>
+        <div ng-if="numresults > 100">
+          <strong>I can only display the top 100 hits right now.</strong>
           <br />
         </div>
         <div class="grid m-b-20" ui-grid="parseresults" ui-grid-move-columns ui-grid-resize-columns ui-grid-auto-resize ui-grid-pinning ui-grid-selection ui-grid-grouping ui-grid-infinite-scroll>
