@@ -72,7 +72,7 @@ def handle_csq_line(line):
 
   new_line = ''
   sub_fields = list()
-  line_s = line.strip('">\n').split('Format: ')[1].split('|')
+  line_s = line.strip('">\r\n').split('Format: ')[1].split('|')
   for field in line_s:
     sub_fields.append(field)
     new_line += '##INFO=<ID=CSQ_' + field + ',Number=.,Type=String,' + \
@@ -159,11 +159,11 @@ def parse_inp_file(inp_file, out_folder):
   NOFILTERB = False
 
   try:
-    inp = gzip.open(inp_file)
+    inp = gzip.open(inp_file, 'rU')
     inp.read(2) #will fail if not gzipped
     inp.seek(0) #seek back
   except:
-    inp = open(inp_file)
+    inp = open(inp_file, 'rU')
 
   out_file = out_folder + '/pre_processed_inp_file.vcf'
 
