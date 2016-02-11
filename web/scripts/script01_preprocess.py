@@ -109,8 +109,9 @@ def substitute_dots(line):
 
   except:
       #this VCF is mangled, or it isn't a VCF
-      return "This file is not properly formatted. Please check the \
-              documentation for the VCF format!"
+      raise #return to caller
+      #return "This file is not properly formatted. Please check the \
+      #        documentation for the VCF format!"
 
 
 def split_CSQ_field(sub_fields, line):
