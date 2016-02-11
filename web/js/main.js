@@ -102,7 +102,7 @@ app.controller('VCFFilterController', function($scope, $sce, $state, $sessionSto
     $scope.nofilterb = false;
 
     //'het' or 'hom' gets passed as script 04's -g argument.
-    $scope.opt_b_genotype = {'het': 'Heterozygous', 'hom':'Homozygous'};
+    $scope.opt_b_genotype = {'het': 'Heterozygous', 'homref':'Homozygous Ref', 'homalt':'Homozygous Alt'};
 
     //this should populate from the preprocessed VCF file
     $scope.opt_b_sample = ['First Option', 'Second Option'];
