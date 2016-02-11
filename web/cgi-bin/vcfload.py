@@ -40,12 +40,17 @@ if "processVCF" in query.keys():
     if WIN_PLATFORM_NONFREE:
         curDir = curDir.replace('\\', '\\\\')
 
-    #run the API call for preprocessing
-    with helpers.no_console_output():
-        (availsamples, NOFILTERB) = script01_api_call(fname, curDir)
-
     #collect output
     myfields2 = {}
+
+    #run the API call for preprocessing
+    with helpers.no_console_output():
+        try:
+            (availsamples, NOFILTERB) = script01_api_call(fname, curDir)
+        except Exception, e: #catch all
+            myfields2['ERRMSG'] = str(e)
+
+
     myfields2['ostuff'] = ""
     myfields2['nofilterb'] = NOFILTERB #by default, filter B will be enabled
 
@@ -78,6 +83,9 @@ if "processVCF" in query.keys():
         nCores = 1
 
     myfields2['numCores'] = nCores
+
+    if ('ERRMSG' not in myfields2.keys()):
+        myfields2['ERRMSG'] = "None"
 
     #the final return dictionary, JSONified
     availfields_str = json.dumps(myfields2, encoding="utf-8")

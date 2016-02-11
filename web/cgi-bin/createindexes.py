@@ -88,8 +88,14 @@ if "selval[]" in query.keys():
 
     #suppress output, if any, and run API call
     #with helpers.no_console_output():
-    script02_api_call(os.path.join(curDir, inpfile),
+
+    returnvals = {}
+
+    try:
+        script02_api_call(os.path.join(curDir, inpfile),
                                     curDir, inputfields, numCores)
+    except Exception, e:
+        returnvals['ERRMSG'] = str(e)
 
     #append the latest indexed fields to our parsed-fields tracker file
     with open(os.path.join(curDir, 'indexedfields.txt'), 'a') as offf:
@@ -108,7 +114,7 @@ if "selval[]" in query.keys():
             if ".GT" in lne and lne[:lne.find('.GT')] not in availSamples:
                 availSamples.append(lne[:lne.find('.GT')])
 
-    returnvals = {}
+
     returnvals['workingdir'] = curDir
     returnvals['indexedfields'] = retfields
     returnvals['availsamples_filterb'] = availSamples
@@ -124,11 +130,14 @@ if "selval[]" in query.keys():
     else:
         returnvals['nofilterb'] = False
 
+    if ('ERRMSG' not in returnvals.keys()):
+        returnvals['ERRMSG'] = "None"
+
     jsonreturn = json.dumps(returnvals)
 
     #print out the JSON return value
     #print """Content-type: application/json\r\n"""
-    
+
     #HOTFIX: The '\n' before the response is required for Chromium/Chrome
     #on Windows, and possibly Safari on Mac
     print """\n%s""" % jsonreturn
