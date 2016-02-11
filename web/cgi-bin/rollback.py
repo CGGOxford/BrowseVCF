@@ -106,6 +106,9 @@ if 'remFilename' in query.keys():
     returnvals['workingdir'] = curDir
     returnvals['removedfile'] = prevFile
 
+    #load the grid text
+    returnvals['outtextmap'] = outtextmap
+
     #use this flag to determine whether the output file is "out000.tsv"
     #we need to remove the sessionStorage for PrevFile so that this doesn't get
     #passed in as a -p parameter to Silvia's scripts
