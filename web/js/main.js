@@ -251,7 +251,7 @@ app.controller('VCFFilterController', function($scope, $sce, $state, $sessionSto
           if (success.ERRMSG != "None")
           {
             //throw an alert
-            alert("The VCF file could not be processed.\nThis is usually because the input VCF contains a duplicate line or some other formatting quirk.\nPlease try another file.\nFor reference, the error I got was:\n" + success.ERRMSG);
+            alert("The VCF file could not be processed.\nThis is usually because the input VCF contains a duplicate line or some other formatting issue.\nPlease try another file.\nFor reference, the error I got was:\n\"" + success.ERRMSG + "\"");
           }
 
           else
@@ -301,14 +301,14 @@ app.controller('VCFFilterController', function($scope, $sce, $state, $sessionSto
 	    });
 
 	    request.success(function(success) {
-        
+
         $scope.sendSucceed = true;
         $scope.isIndexingVCF = false;
 
         if (success.ERRMSG != "None")
         {
           //throw an alert
-          alert("The VCF file could not be processed.\nThis is usually because the input VCF contains a duplicate line or some other formatting quirk.\nPlease try another file.\nFor reference, the error I got was:\n" + success.ERRMSG);
+          alert("The VCF file could not be processed.\nThis is usually because the input VCF contains a duplicate line or some other formatting issue.\nPlease try another file.\nFor reference, the error I got was:\n\"" + success.ERRMSG + "\"");
         }
 
         else
