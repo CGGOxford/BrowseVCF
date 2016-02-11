@@ -72,7 +72,7 @@ def handle_csq_line(line):
 
   new_line = ''
   sub_fields = list()
-  line_s = line.strip('">\n').split('Format: ')[1].split('|')
+  line_s = line.strip('">\r\n').split('Format: ')[1].split('|')
   for field in line_s:
     sub_fields.append(field)
     new_line += '##INFO=<ID=CSQ_' + field + ',Number=.,Type=String,' + \
@@ -85,7 +85,7 @@ def substitute_dots(line):
   '-1'.
   """
   try:
-      line_s = line.strip('\n').split('\t')
+      line_s = line.strip('\r\n').split('\t')
       info = {(item.split('=')[0] if item.find('=')!= -1
     	else item):(item.split('=')[1] if item.find('=')!= -1
     	else '-1') for item in line_s[7].split(';')}
@@ -124,7 +124,7 @@ def split_CSQ_field(sub_fields, line):
   # they are written in the .vcf file and in the same order as sub_fields
   # ex: [['G','G'], ['ENST00000456328','ENST00000541675'], ['YES',''], ...]
   all_values = [[] for x in xrange(len(sub_fields))]
-  line_s = line.strip('\n').split('\t')
+  line_s = line.strip('\r\n').split('\t')
   info = dict(item.split('=') for item in line_s[7].split(';'))
   try:
     annotations = info['CSQ'].split(',')
@@ -159,11 +159,11 @@ def parse_inp_file(inp_file, out_folder):
   NOFILTERB = False
 
   try:
-    inp = gzip.open(inp_file)
+    inp = gzip.open(inp_file, 'rU')
     inp.read(2) #will fail if not gzipped
     inp.seek(0) #seek back
   except:
-    inp = open(inp_file)
+    inp = open(inp_file, 'rU')
 
   out_file = out_folder + '/pre_processed_inp_file.vcf'
 

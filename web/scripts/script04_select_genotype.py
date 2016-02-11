@@ -22,7 +22,7 @@ def parse_args():
   parser.add_argument('-o', dest = 'out_file', required = True,
                       help = 'output file [.txt]')
   parser.add_argument('-g', dest = 'genotype', required = True,
-                      help = 'genotype [one of: het, hom]')
+                      help = 'genotype [one of: het, homref, homalt]')
   parser.add_argument('-s', dest = 'samples', required = True,
                       help = "samples [either 'all' or comma-separated list" +
                              " of sample IDs]")
@@ -108,8 +108,11 @@ def filter_variants_from_previous_results(inp_folder, genotype, samples_list,
         gen = row[sample_idx].replace('/','').replace('|','')
         # note: gen == len(gen)*gen[0] to check if all the characters in a
         # string are the same is even faster than count()!
-        if gen == len(gen)*gen[0] and genotype == 'hom' and gen[0] != '.':
-          ids.add(row[row_id_idx])
+        if gen == len(gen)*gen[0] and gen[0] != '.':
+          if gen[0] == '0' and genotype == 'homref':
+            ids.add(row[row_id_idx])
+          elif gen[0] != '0' and genotype == 'homalt':
+            ids.add(row[row_id_idx])
         elif gen != len(gen)*gen[0] and genotype == 'het' and gen[0] != '.':
           ids.add(row[row_id_idx])
     # close table and store results
@@ -141,8 +144,11 @@ def filter_variants(inp_folder, genotype, samples_list):
       gen = row[sample_idx].replace('/','').replace('|','')
       # note: gen == len(gen)*gen[0] to check if all the characters in a
       # string are the same is even faster than count()!
-      if gen == len(gen)*gen[0] and genotype == 'hom' and gen[0] != '.':
-        ids.add(row[row_id_idx])
+      if gen == len(gen)*gen[0] and gen[0] != '.':
+        if gen[0] == '0' and genotype == 'homref':
+          ids.add(row[row_id_idx])
+        elif gen[0] != '0' and genotype == 'homalt':
+          ids.add(row[row_id_idx])
       elif gen != len(gen)*gen[0] and genotype == 'het' and gen[0] != '.':
         ids.add(row[row_id_idx])
     # close table and store results
