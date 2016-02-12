@@ -109,8 +109,9 @@ def substitute_dots(line):
 
   except:
       #this VCF is mangled, or it isn't a VCF
-      return "This file is not properly formatted. Please check the \
-              documentation for the VCF format!"
+      raise #return to caller
+      #return "This file is not properly formatted. Please check the \
+      #        documentation for the VCF format!"
 
 
 def split_CSQ_field(sub_fields, line):
@@ -165,12 +166,13 @@ def parse_inp_file(inp_file, out_folder):
   except:
     inp = open(inp_file, 'rU')
 
-  out_file = out_folder + '/pre_processed_inp_file.vcf'
+  out_file = out_folder + '/pre_processed_inp_file.vcf.gz'
 
   if WIN_PLATFORM_NONFREE:
-    out_file = out_folder + "\\pre_processed_inp_file.vcf"
+    out_file = out_folder + "\\pre_processed_inp_file.vcf.gz"
 
-  out = open(out_file, 'w')
+  #write straight out to gzip
+  out = gzip.open(out_file, 'wb')
 
   for line in inp:
     if line.startswith('#'):
@@ -193,6 +195,7 @@ def parse_inp_file(inp_file, out_folder):
       if 'sub_fields' in locals():
         line = split_CSQ_field(sub_fields, line)
     out.write(line)
+
   inp.close()
   out.close()
   # return sample names with file name, and whether filter b can be activated
@@ -265,7 +268,7 @@ def script01_api_call(i_file, o_folder):
   out_folder = check_output_file(o_folder)
   (out_file, samples, NOFILTERB) = parse_inp_file(inp_file, out_folder)
   sys.stderr.write("Input file parsed.\n")
-  compress_output_file(out_file)
+  #compress_output_file(out_file) #superseded by direct gzip write
   sys.stderr.write("Output file compression complete.\n")
   schema_file = create_general_schema(out_folder)
   edit_global_schema_in_place(schema_file)

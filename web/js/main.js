@@ -245,30 +245,40 @@ app.controller('VCFFilterController', function($scope, $sce, $state, $sessionSto
 
 	    request.success(function(success) {
 
-	        $scope.sendSucceed = true;
-	        $scope.isLoadingVCF = false;
+          $scope.sendSucceed = true;
+          $scope.isLoadingVCF = false;
 
-          $scope.myfields = success.filterfields;
-
-          if (success.nofilterb === true)
+          if (success.ERRMSG != "None")
           {
-            $scope.nofilterb = true;
+            //throw an alert
+            alert("The VCF file could not be processed.\nThis is usually because the input VCF contains a duplicate line or some other formatting issue.\nPlease try another file.\nFor reference, the error I got was:\n\"" + success.ERRMSG + "\"");
           }
 
-          //set working directory variables
-          $scope.$storage.OGCWOrkingDir = success.workingdir;
-          $scope.$storage.OGCDownloadPath = success.downloadpath;
+          else
+          {
+            $scope.myfields = success.filterfields;
 
-          //clear the history and previous results
-          delete $scope.$storage.PrevFile;
-          $scope.filterHistory = [];
-          $scope.numresults = undefined;
-          $scope.parseresults.data = [];
+            if (success.nofilterb === true)
+            {
+              $scope.nofilterb = true;
+            }
 
-          //move the wizard along to the next state
-          $state.go('content.wormtables');
+            //set working directory variables
+            $scope.$storage.OGCWOrkingDir = success.workingdir;
+            $scope.$storage.OGCDownloadPath = success.downloadpath;
 
-          $scope.availCores = success.numCores;
+            //clear the history and previous results
+            delete $scope.$storage.PrevFile;
+            $scope.filterHistory = [];
+            $scope.numresults = undefined;
+            $scope.parseresults.data = [];
+
+            //move the wizard along to the next state
+            $state.go('content.wormtables');
+
+            $scope.availCores = success.numCores;
+
+          }
 	    });
 
 
@@ -292,9 +302,17 @@ app.controller('VCFFilterController', function($scope, $sce, $state, $sessionSto
 
 	    request.success(function(success) {
 
-	        $scope.sendSucceed = true;
-	        $scope.isIndexingVCF = false;
+        $scope.sendSucceed = true;
+        $scope.isIndexingVCF = false;
 
+        if (success.ERRMSG != "None")
+        {
+          //throw an alert
+          alert("The VCF file could not be processed.\nThis is usually because the input VCF contains a duplicate line or some other formatting issue.\nPlease try another file.\nFor reference, the error I got was:\n\"" + success.ERRMSG + "\"");
+        }
+
+        else
+        {
           $scope.opt_a_field_to_filter_variants = success.indexedfields;
           $scope.opt_e_keyword_field = success.indexedfields;
 
@@ -317,6 +335,8 @@ app.controller('VCFFilterController', function($scope, $sce, $state, $sessionSto
 
           //move the wizard along to the next state
           $state.go('content.filters');
+
+        }
 
 	    });
 

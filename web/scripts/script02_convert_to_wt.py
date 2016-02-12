@@ -150,7 +150,11 @@ def create_one_wormtable(schema_path, inp_file, out_file):
   runargs = '-q --schema ' + schema_path + ' --cache-size=' + cachesize + \
             inp_file + ' ' + out_file
   #run vcf2wt as a library function, no system calls
-  wt.vcf2wt_main(runargs.split())
+  try:
+      wt.vcf2wt_main(runargs.split())
+  except:
+      raise #return quietly
+
   return
 
 def create_all_wormtables(inp_file, out_folder, cores = 0):
@@ -202,8 +206,8 @@ def create_all_wormtables(inp_file, out_folder, cores = 0):
       for r in results:
         r.get()
     except Exception, exc:
-      print exc
-      sys.exit()
+        raise #raise the exception to the caller
+
     pool.join()
 
   return all_schema_files
