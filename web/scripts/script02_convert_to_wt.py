@@ -147,6 +147,7 @@ def create_one_wormtable(schema_path, inp_file, out_file):
   cachesize = '16G '
   if WIN_PLATFORM_NONFREE:
       cachesize = '4G ' # to deal with BDB error...
+
   runargs = '-q --schema ' + schema_path + ' --cache-size=' + cachesize + \
             inp_file + ' ' + out_file
   #run vcf2wt as a library function, no system calls
@@ -154,6 +155,13 @@ def create_one_wormtable(schema_path, inp_file, out_file):
       wt.vcf2wt_main(runargs.split())
   except:
       raise #return quietly
+
+  # add row index for this wormtable
+  # supersedes add_all_rowid_indexes() and add_one_rowid_index()
+  # doing it here means we avail of the thread/process that is already spawned
+  # sys.stderr.write('Indexing %s\n' % (out_file,))
+  runargs = 'add -q --cache-size=' + cachesize + out_file + ' row_id'
+  wt.wtadmin_main(runargs.split())
 
   return
 
@@ -311,11 +319,18 @@ def script02_api_call(i_file, o_folder, u_fields, n_cores):
   t1 = datetime.now()
   inp_file = check_input_file(i_file)
   out_folder = check_output_file(o_folder)
+
   user_fields = u_fields
   schema_file = out_folder + '/' + 'schema.xml'
+
   create_single_field_schemas(schema_file, user_fields)
-  all_schema_files = create_all_wormtables(inp_file, out_folder, cores = int(n_cores))
-  add_all_rowid_indexes(inp_file, out_folder, all_schema_files)
+
+  all_schema_files = create_all_wormtables(inp_file, \
+                            out_folder, cores = int(n_cores))
+
+  #add_all_rowid_indexes(inp_file, out_folder, \
+  #                        all_schema_files, cores = int(n_cores))
+
   add_chrompos_index(out_folder)
   t2 = datetime.now()
   return
