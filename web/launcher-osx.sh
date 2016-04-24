@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export PATH=$CWD/../python27osx/bin:$PATH
+export PATH=`pwd`/../python27osx/bin:$PATH
 echo $PATH
 
 export LD_LIBRARY_PATH=$CWD/osx_libs:$LDB_LIBRARY_PATH
