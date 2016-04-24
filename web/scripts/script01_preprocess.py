@@ -23,7 +23,7 @@ WIN_PLATFORM_NONFREE = False
 # GNU default path for Ubuntu/Debian
 #TODO: Load paths dynamically, or ship the GNU binaries locally as well
 TOOLPATH = "/usr/local/bin/"
-if 'win' in current_os.lower():
+if 'windows' in current_os.lower():
   WIN_PLATFORM_NONFREE = True
   TOOLPATH = "./win_tools/"
 

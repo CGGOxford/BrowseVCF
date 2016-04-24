@@ -28,7 +28,7 @@ current_os = platform.system()
 # Agnostic paths based on platform
 WIN_PLATFORM_NONFREE = False
 TOOLPATH = "/usr/local/bin/"  # on Unix systems, vcf2wt etc. are not in /usr/bin
-if 'win' in current_os.lower():
+if 'windows' in current_os.lower():
   WIN_PLATFORM_NONFREE = True
   TOOLPATH = os.getcwd() + "\\win_tools\\"
   TOOLPATH = TOOLPATH.replace('\\', '\\\\')
