@@ -242,13 +242,24 @@ def create_general_schema(out_folder):
 def edit_global_schema_in_place(schema_file):
   """
   Store all the content of schema_file in memory, then replace all instances of
-  'var(1)' with 'var(2)', re-open the file in write mode and write all lines.
+  'var(1)' with 'var(2)' except for REF, ALT, and INFO fields. Finally, re-open
+  the file in write mode and write all lines.
+
+  This step allows long string fields (up to 64k characters) to be properly
+  represented by wormtable, whereas all other string-based fields will be 
+  represented with less bytes, to save disk space.
   """
 
   all_lines = list()
   f = open(schema_file, 'r')
   for line in f:
-    all_lines.append(line.replace('var(1)', 'var(2)'))
+    if 'name="REF"' in line:
+      line = line.replace('var(1)', 'var(2)')
+    elif 'name="ALT"' in line:
+      line = line.replace('var(1)', 'var(2)')
+    elif 'name="INFO.' in line:
+      line = line.replace('var(1)', 'var(2)')
+    all_lines.append(line)
   f.close()
   f = open(schema_file, 'w')
   f.writelines(all_lines)
