@@ -114,8 +114,8 @@ def filter_variants_from_previous_results(inp_folder, field_name, operator,
       # the type of the field value for the current row is 'str'
       elif isinstance(row[field_name_idx], str):
         if operator == 'greater_than' or operator == 'less_than':
-          # special case: INT/INT (which is recognised as string by wormtable)
-          # solution: we only use the first number of the couple of INT
+          # special case: NUM/NUM (which is recognised as string by wormtable)
+          # solution: we check that the ratio NUM/NUM is >,<,= cutoff
           for value in row[field_name_idx].split(','):
             if value == '' or value == 'nan':
               if keep_novalue == 'True':
@@ -123,11 +123,11 @@ def filter_variants_from_previous_results(inp_folder, field_name, operator,
                 break
             elif value.find('/') != -1:
               if operator == 'greater_than':
-                if float(value.split('/')[0]) > float(cutoff):
+                if float(value.split('/')[0])/float(value.split('/')[1]) > float(cutoff):
                   ids.add(row[row_id_idx])
                   break
               elif operator == 'less_than':
-                if float(value.split('/')[0]) < float(cutoff):
+                if float(value.split('/')[0])/float(value.split('/')[1]) < float(cutoff):
                   ids.add(row[row_id_idx])
                   break
             else:
@@ -138,6 +138,12 @@ def filter_variants_from_previous_results(inp_folder, field_name, operator,
           for value in row[field_name_idx].split(','):
             if value == '' or value == 'nan':
               if keep_novalue == 'True':
+                ids.add(row[row_id_idx])
+                break
+            # special case: NUM/NUM (which is recognised as string by wormtable)
+            # solution: we check that the ratio NUM/NUM is >,<,= cutoff
+            elif value.find('/') != -1:
+              if float(value.split('/')[0])/float(value.split('/')[1]) == float(cutoff):
                 ids.add(row[row_id_idx])
                 break
             elif value == cutoff:
@@ -245,8 +251,8 @@ def filter_variants(inp_folder, field_name, operator, cutoff, keep_novalue):
     # the type of the field value for the current row is 'str'
     elif isinstance(row[field_name_idx], str):
       if operator == 'greater_than' or operator == 'less_than':
-        # special case: INT/INT (which is recognised as string by wormtable)
-        # solution: we only use the first number of the couple of INT
+        # special case: NUM/NUM (which is recognised as string by wormtable)
+        # solution: we check that the ratio NUM/NUM is >,<,= cutoff
         for value in row[field_name_idx].split(','):
           if value == '' or value == 'nan':
             if keep_novalue == 'True':
@@ -254,11 +260,11 @@ def filter_variants(inp_folder, field_name, operator, cutoff, keep_novalue):
               break
           elif value.find('/') != -1:
             if operator == 'greater_than':
-              if float(value.split('/')[0]) > float(cutoff):
+              if float(value.split('/')[0])/float(value.split('/')[1]) > float(cutoff):
                 ids.add(row[row_id_idx])
                 break
             elif operator == 'less_than':
-              if float(value.split('/')[0]) < float(cutoff):
+              if float(value.split('/')[0])/float(value.split('/')[1]) < float(cutoff):
                 ids.add(row[row_id_idx])
                 break
           else:
@@ -269,6 +275,12 @@ def filter_variants(inp_folder, field_name, operator, cutoff, keep_novalue):
         for value in row[field_name_idx].split(','):
           if value == '' or value == 'nan':
             if keep_novalue == 'True':
+              ids.add(row[row_id_idx])
+              break
+          # special case: NUM/NUM (which is recognised as string by wormtable)
+          # solution: we check that the ratio NUM/NUM is >,<,= cutoff
+          elif value.find('/') != -1:
+            if float(value.split('/')[0])/float(value.split('/')[1]) == float(cutoff):
               ids.add(row[row_id_idx])
               break
           elif value == cutoff:
