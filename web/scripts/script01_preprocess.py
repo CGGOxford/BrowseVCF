@@ -82,19 +82,19 @@ def handle_csq_line(line):
 def substitute_dots(line):
   """
   Whenever a value in a subfield of the INFO field is '.', replace it with a
-  '-1'.
+  'nan'.
   """
   try:
       line_s = line.strip('\r\n').split('\t')
       info = {(item.split('=')[0] if item.find('=')!= -1
     	else item):(item.split('=')[1] if item.find('=')!= -1
-    	else '-1') for item in line_s[7].split(';')}
+    	else 'nan') for item in line_s[7].split(';')}
 
       for key in info:
         values = list()
         for val in info[key].split(','):
           if val == '.':
-            values.append('-1')
+            values.append('nan')
           else:
             values.append(val)
         info[key] = ','.join(values)
@@ -152,7 +152,7 @@ def parse_inp_file(inp_file, out_folder):
   """
   Parse the input file:
    - split the field CSQ in subfields
-   - substitute any '.' value with '-1'
+   - substitute any '.' value with 'nan'
   Print out sample names at the end, useful by web services.
   """
 
@@ -189,7 +189,7 @@ def parse_inp_file(inp_file, out_folder):
                            'genotypes. Filter B cannot run...\n')
           NOFILTERB = True
     else:
-      # substitute '.' values with '-1'
+      # substitute '.' values with 'nan'
       line = substitute_dots(line)
       # split the CSQ INFO field in several subfields (if CSQ exists)
       if 'sub_fields' in locals():
