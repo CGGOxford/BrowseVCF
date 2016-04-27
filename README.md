@@ -99,9 +99,6 @@ Want to contribute? Great! Simply report a new issue on GitHub or write an email
 ### 5. License
 BrowseVCF is available under the [GPL v3] license.
 
-
-[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen.
-
    [GPL v3]: http://www.gnu.org/licenses/gpl-3.0.en.html
    [release page]: https://github.com/BSGOxford/BrowseVCF/releases
 
