@@ -4,21 +4,21 @@ Welcome to BrowseVCF version 2.6
 BrowseVCF is a web-based application and workflow to quickly prioritise disease-causative variants in VCF files.
 
 # Table of Contents
-1. [Requirements and Installation](#requirements-and-installation)  
-1.1 [For Windows users](#for-windows-users)  
-1.2 [For GNU Linux users](#for-gnu-linux-users)  
-1.3 [For Mac users](#for-mac-users)  
-2. [Usage as standalone web application](#usage-as-stand-alone-web-application)  
-3. [Usage as command line tool](#usage-as-command-line-tool)  
-4. [Contact and Contribute](#contact-and-contribute)
-5. [License](#license)
+1. [Requirements and Installation](#1-requirements-and-installation)  
+  1. [For Windows users](#i-for-windows-users)  
+  2. [For GNU Linux users](#ii-for-gnu-linux-users)  
+  3. [For Mac OS users](#iii-for-mac-os-users)  
+2. [Usage as standalone web application](#2-usage-as-standalone-web-application)  
+3. [Usage as command line tool](#3-usage-as-command-line-tool)  
+4. [Contact and Contribute](#4-contact-and-contribute)  
+5. [License](#5-license)
 
 ### 1. Requirements and Installation
 
-##### 1.1 *For Windows users*
+##### i. *For Windows users*
 Download the zip file (`browseVCF_win7_vX.X.zip`) from the [release page], unzip it somewhere, and double-click on `launcher-windows.bat` in the `web` directory. 
 
-##### 1.2 *For GNU Linux users*
+##### ii. *For GNU Linux users*
 1) The latest versions of CentOS, Fedora, Redhat and Ubuntu come with Python 2.7 out of the box. 
 If it's not installed, download Python from `https://www.python.org/`.
 
@@ -45,7 +45,7 @@ If it's not installed, download Python from `https://www.python.org/`.
 `wget https://github.com/BSGOxford/BrowseVCF/archive/vX.X.tar.gz`
 `tar -xvf vX.X.tar.gz`
 
-##### 1.3 *For Mac OS users*
+##### iii. *For Mac OS users*
 Download the OSX-specific .tar.gz file on the [release page], unzip it somewhere, and run `launcher-osx.sh` from a Terminal within the `web` directory. This version is shipped with a stripped-down Python v2.7.11 compiled on OSX, along with pre-compiled wormtable and BerkeleyDB modules. Tested on OSX El Capitan.
 
 Alternatively, to compile from source, please follow the instructions below.
