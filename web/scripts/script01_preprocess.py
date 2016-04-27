@@ -160,7 +160,7 @@ def parse_inp_file(inp_file, out_folder):
   NOFILTERB = False
 
   try:
-    inp = gzip.open(inp_file, 'rU')
+    inp = gzip.open(inp_file, 'rb')
     inp.read(2) #will fail if not gzipped
     inp.seek(0) #seek back
   except:
