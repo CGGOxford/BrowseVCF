@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import sys
+import math
 import argparse
 import wormtable as wt
 from datetime import datetime
@@ -103,7 +104,8 @@ def filter_variants_from_previous_results(inp_folder, field_name, operator,
   for row in index.cursor(['row_id', field_name]):
     # only analyse row if row_id is among the ones in ids_to_check
     if row[row_id_idx] in ids_to_check:
-      # the type of the field value for the current row is 'NoneType' or empty
+      # the type of the field value for the current row is 'NoneType', empty,
+      # or 'nan'
       if row[field_name_idx] is None or row[field_name_idx] == '':
         if keep_novalue == 'True':
           ids.add(row[row_id_idx])
@@ -115,26 +117,38 @@ def filter_variants_from_previous_results(inp_folder, field_name, operator,
           # special case: INT/INT (which is recognised as string by wormtable)
           # solution: we only use the first number of the couple of INT
           for value in row[field_name_idx].split(','):
-            if value == '' or value == '-1':
+            if value == '' or value == 'nan':
               if keep_novalue == 'True':
                 ids.add(row[row_id_idx])
+                break
             elif value.find('/') != -1:
               if operator == 'greater_than':
                 if float(value.split('/')[0]) > float(cutoff):
                   ids.add(row[row_id_idx])
+                  break
               elif operator == 'less_than':
                 if float(value.split('/')[0]) < float(cutoff):
                   ids.add(row[row_id_idx])
+                  break
             else:
               sys.stderr.write('\nError: ' + operator + ' incompatible with' +
                                ' field type (string).\n')
               sys.exit()
         elif operator == 'equal_to':
           for value in row[field_name_idx].split(','):
-            if value == cutoff:
+            if value == '' or value == 'nan':
+              if keep_novalue == 'True':
+                ids.add(row[row_id_idx])
+                break
+            elif value == cutoff:
               ids.add(row[row_id_idx])
+              break
         elif operator == 'contains_keyword':
           for value in row[field_name_idx].split(','):
+            if value == '' or value == 'nan':
+              if keep_novalue == 'True':
+                ids.add(row[row_id_idx])
+                break
             for keyword in set(cutoff.split(',')):
               if value.find(keyword) != -1:
                 ids.add(row[row_id_idx])
@@ -143,21 +157,37 @@ def filter_variants_from_previous_results(inp_folder, field_name, operator,
       elif isinstance(row[field_name_idx], tuple):
         if operator == 'greater_than':
           for value in row[field_name_idx]:
-            if value > float(cutoff):
+            if math.isnan(value):
+              if keep_novalue == 'True':
+                ids.add(row[row_id_idx])
+                break
+            elif value > float(cutoff):
               ids.add(row[row_id_idx])
               break
         elif operator == 'less_than':
           for value in row[field_name_idx]:
-            if value < float(cutoff):
+            if math.isnan(value):
+              if keep_novalue == 'True':
+                ids.add(row[row_id_idx])
+                break
+            elif value < float(cutoff):
               ids.add(row[row_id_idx])
               break
         elif operator == 'equal_to':
           for value in row[field_name_idx]:
-            if value == float(cutoff):
+            if math.isnan(value):
+              if keep_novalue == 'True':
+                ids.add(row[row_id_idx])
+                break
+            elif value == float(cutoff):
               ids.add(row[row_id_idx])
               break
         elif operator == 'contains_keyword':
           for value in row[field_name_idx]:
+            if math.isnan(value):
+              if keep_novalue == 'True':
+                ids.add(row[row_id_idx])
+                break
             for keyword in set(cutoff.split(',')):
               if value.find(keyword) != -1:
                 ids.add(row[row_id_idx])
@@ -165,7 +195,10 @@ def filter_variants_from_previous_results(inp_folder, field_name, operator,
       # the type of the field value for the current row is 'int' or 'float'
       # this includes cases of string numbers (e.g. '1234')
       elif is_number(row[field_name_idx]):
-        if operator == 'greater_than':
+        if math.isnan(row[field_name_idx]):
+          if keep_novalue == 'True':
+            ids.add(row[row_id_idx])
+        elif operator == 'greater_than':
           if row[field_name_idx] > float(cutoff):
             ids.add(row[row_id_idx])
         elif operator == 'less_than':
@@ -202,7 +235,8 @@ def filter_variants(inp_folder, field_name, operator, cutoff, keep_novalue):
   field_name_idx = 1
   # NOTE: row is a tuple of row_id and field_name
   for row in table.cursor(['row_id', field_name]):
-    # the type of the field value for the current row is 'NoneType' or empty
+    # the type of the field value for the current row is 'NoneType', empty,
+    # or 'nan'
     if row[field_name_idx] is None or row[field_name_idx] == '':
       if keep_novalue == 'True':
         ids.add(row[row_id_idx])
@@ -214,26 +248,38 @@ def filter_variants(inp_folder, field_name, operator, cutoff, keep_novalue):
         # special case: INT/INT (which is recognised as string by wormtable)
         # solution: we only use the first number of the couple of INT
         for value in row[field_name_idx].split(','):
-          if value == '' or value == '-1':
+          if value == '' or value == 'nan':
             if keep_novalue == 'True':
               ids.add(row[row_id_idx])
+              break
           elif value.find('/') != -1:
             if operator == 'greater_than':
               if float(value.split('/')[0]) > float(cutoff):
                 ids.add(row[row_id_idx])
+                break
             elif operator == 'less_than':
               if float(value.split('/')[0]) < float(cutoff):
                 ids.add(row[row_id_idx])
+                break
           else:
             sys.stderr.write('\nError: ' + operator + ' incompatible with' +
                              ' field type (string).\n')
             sys.exit()
       elif operator == 'equal_to':
         for value in row[field_name_idx].split(','):
-          if value == cutoff:
+          if value == '' or value == 'nan':
+            if keep_novalue == 'True':
+              ids.add(row[row_id_idx])
+              break
+          elif value == cutoff:
             ids.add(row[row_id_idx])
+            break
       elif operator == 'contains_keyword':
         for value in row[field_name_idx].split(','):
+          if value == '' or value == 'nan':
+            if keep_novalue == 'True':
+              ids.add(row[row_id_idx])
+              break
           for keyword in set(cutoff.split(',')):
             if value.find(keyword) != -1:
               ids.add(row[row_id_idx])
@@ -242,21 +288,37 @@ def filter_variants(inp_folder, field_name, operator, cutoff, keep_novalue):
     elif isinstance(row[field_name_idx], tuple):
       if operator == 'greater_than':
         for value in row[field_name_idx]:
-          if value > float(cutoff):
+          if math.isnan(value):
+            if keep_novalue == 'True':
+              ids.add(row[row_id_idx])
+              break
+          elif value > float(cutoff):
             ids.add(row[row_id_idx])
             break
       elif operator == 'less_than':
         for value in row[field_name_idx]:
-          if value < float(cutoff):
+          if math.isnan(value):
+            if keep_novalue == 'True':
+              ids.add(row[row_id_idx])
+              break
+          elif value < float(cutoff):
             ids.add(row[row_id_idx])
             break
       elif operator == 'equal_to':
         for value in row[field_name_idx]:
-          if value == float(cutoff):
+          if math.isnan(value):
+            if keep_novalue == 'True':
+              ids.add(row[row_id_idx])
+              break
+          elif value == float(cutoff):
             ids.add(row[row_id_idx])
             break
       elif operator == 'contains_keyword':
         for value in row[field_name_idx]:
+          if math.isnan(value):
+            if keep_novalue == 'True':
+              ids.add(row[row_id_idx])
+              break
           for keyword in set(cutoff.split(',')):
             if value.find(keyword) != -1:
               ids.add(row[row_id_idx])
@@ -264,7 +326,10 @@ def filter_variants(inp_folder, field_name, operator, cutoff, keep_novalue):
     # the type of the field value for the current row is 'int' or 'float'
     # this includes cases of string numbers (e.g. '1234')
     elif is_number(row[field_name_idx]):
-      if operator == 'greater_than':
+      if math.isnan(row[field_name_idx]):
+        if keep_novalue == 'True':
+          ids.add(row[row_id_idx])
+      elif operator == 'greater_than':
         if row[field_name_idx] > float(cutoff):
           ids.add(row[row_id_idx])
       elif operator == 'less_than':

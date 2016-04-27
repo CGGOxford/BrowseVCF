@@ -248,6 +248,9 @@ def edit_global_schema_in_place(schema_file):
   This step allows long string fields (up to 64k characters) to be properly
   represented by wormtable, whereas all other string-based fields will be 
   represented with less bytes, to save disk space.
+
+  Also, for missing values ('nan') to be properly recognised as floats, all the
+  integer INFO fields are converted to float INFO fields.
   """
 
   all_lines = list()
@@ -259,6 +262,7 @@ def edit_global_schema_in_place(schema_file):
       line = line.replace('var(1)', 'var(2)')
     elif 'name="INFO.' in line:
       line = line.replace('var(1)', 'var(2)')
+      line = line.replace('element_type="int"', 'element_type="float"')
     all_lines.append(line)
   f.close()
   f = open(schema_file, 'w')
