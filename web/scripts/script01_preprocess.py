@@ -22,7 +22,7 @@ if 'windows' in current_os.lower():
 
 if current_os.lower() == 'darwin':
     os.environ['PYTHONPATH'] = '%s/osx_libs:$PYTHONPATH' % os.getcwd()
-    
+
 import wormtable as wt
 
 ################################################################################
@@ -251,7 +251,7 @@ def edit_global_schema_in_place(schema_file):
   the file in write mode and write all lines.
 
   This step allows long string fields (up to 64k characters) to be properly
-  represented by wormtable, whereas all other string-based fields will be 
+  represented by wormtable, whereas all other string-based fields will be
   represented with less bytes, to save disk space.
 
   Also, for missing values ('nan') to be properly recognised as floats, all the
@@ -268,6 +268,7 @@ def edit_global_schema_in_place(schema_file):
     elif 'name="INFO.' in line:
       line = line.replace('var(1)', 'var(2)')
       line = line.replace('element_type="int"', 'element_type="float"')
+      line = line.replace('element_type="uint"', 'element_type="float"')
     all_lines.append(line)
   f.close()
   f = open(schema_file, 'w')
