@@ -6,13 +6,13 @@ import argparse
 from datetime import datetime
 
 import platform
-if platform.system().lower() == 'linux':
-    import wormtable as wt
-else:
-    import wormtable_other as wt
 
+if platform.system().lower() == 'darwin':
+    os.environ['PYTHONPATH'] = '%s/osx_libs:$PYTHONPATH' % os.getcwd()
+    
+import wormtable as wt
 
-################################################################################
+###############################################################################
 # This script allows the user to filter variants in a vcf file based the variant
 # type (one of: SNPs, InDels, MNPs).
 ################################################################################

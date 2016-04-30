@@ -24,11 +24,10 @@ if 'windows' in current_os.lower():
   TOOLPATH = os.getcwd() + "\\win_tools\\"
   TOOLPATH = TOOLPATH.replace('\\', '\\\\')
 
-if current_os.lower() == 'linux':
-    import wormtable as wt
-else:
-    import wormtable_other as wt
-
+if current_os.lower() == 'darwin':
+    os.environ['PYTHONPATH'] = '%s/osx_libs:$PYTHONPATH' % os.getcwd()
+    
+import wormtable as wt
 ################################################################################
 # This script allows the user to convert the pre-processed vcf file to several
 # wormtables. Individual wormtables are created for the fields of interest and

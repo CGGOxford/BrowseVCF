@@ -20,10 +20,10 @@ if 'windows' in current_os.lower():
   WIN_PLATFORM_NONFREE = True
   TOOLPATH = "./win_tools/"
 
-if current_os.lower() == 'linux':
-    import wormtable as wt
-else:
-    import wormtable_other as wt
+if current_os.lower() == 'darwin':
+    os.environ['PYTHONPATH'] = '%s/osx_libs:$PYTHONPATH' % os.getcwd()
+    
+import wormtable as wt
 
 ################################################################################
 # This script allows the user to convert the input .vcf or .vcf.gz file into a
