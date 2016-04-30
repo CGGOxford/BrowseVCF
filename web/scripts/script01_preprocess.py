@@ -268,7 +268,8 @@ def edit_global_schema_in_place(schema_file):
     elif 'name="INFO.' in line:
       line = line.replace('var(1)', 'var(2)')
       line = line.replace('element_type="int"', 'element_type="float"')
-      line = line.replace('element_type="uint"', 'element_type="float"')
+      if 'element_type="uint"' in line:
+        line = line.replace('element_type="uint"', 'element_type="float"').replace('element_size="1"', 'element_size="4"')
     all_lines.append(line)
   f.close()
   f = open(schema_file, 'w')
