@@ -6,13 +6,6 @@ import platform
 import argparse
 from subprocess import Popen, PIPE
 from datetime import datetime
-import wormtable as wt
-
-################################################################################
-# This script allows the user to convert the input .vcf or .vcf.gz file into a
-# pre-processed vcf file that can be easily accepted by Wormtable. It also
-# generates the global schema file and edits it in place.
-################################################################################
 
 # Cross-platform stuff...let's first figure out what we're running on
 current_os = platform.system()
@@ -26,6 +19,18 @@ TOOLPATH = "/usr/local/bin/"
 if 'windows' in current_os.lower():
   WIN_PLATFORM_NONFREE = True
   TOOLPATH = "./win_tools/"
+
+if current_os.lower() == 'linux':
+    import wormtable as wt
+else:
+    import wormtable_other as wt
+
+################################################################################
+# This script allows the user to convert the input .vcf or .vcf.gz file into a
+# pre-processed vcf file that can be easily accepted by Wormtable. It also
+# generates the global schema file and edits it in place.
+################################################################################
+
 
 def parse_args():
   """

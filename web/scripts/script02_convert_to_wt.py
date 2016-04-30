@@ -11,7 +11,23 @@ except ImportError:
 import multiprocessing
 from subprocess import Popen, PIPE
 from datetime import datetime
-import wormtable as wt
+
+# Cross-platform stuff... let's first figure out what we're running on
+current_os = platform.system()
+
+# Agnostic paths based on platform
+WIN_PLATFORM_NONFREE = False
+TOOLPATH = "/usr/local/bin/"  # on Unix systems, vcf2wt etc. are not in /usr/bin
+
+if 'windows' in current_os.lower():
+  WIN_PLATFORM_NONFREE = True
+  TOOLPATH = os.getcwd() + "\\win_tools\\"
+  TOOLPATH = TOOLPATH.replace('\\', '\\\\')
+
+if current_os.lower() == 'linux':
+    import wormtable as wt
+else:
+    import wormtable_other as wt
 
 ################################################################################
 # This script allows the user to convert the pre-processed vcf file to several
@@ -21,17 +37,6 @@ import wormtable as wt
 
 # Global variables
 out_folder = ""
-
-# Cross-platform stuff... let's first figure out what we're running on
-current_os = platform.system()
-
-# Agnostic paths based on platform
-WIN_PLATFORM_NONFREE = False
-TOOLPATH = "/usr/local/bin/"  # on Unix systems, vcf2wt etc. are not in /usr/bin
-if 'windows' in current_os.lower():
-  WIN_PLATFORM_NONFREE = True
-  TOOLPATH = os.getcwd() + "\\win_tools\\"
-  TOOLPATH = TOOLPATH.replace('\\', '\\\\')
 
 def parse_args():
   """

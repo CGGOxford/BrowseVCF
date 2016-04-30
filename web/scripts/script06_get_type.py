@@ -3,8 +3,14 @@ import os
 import sys
 import glob
 import argparse
-import wormtable as wt
 from datetime import datetime
+
+import platform
+if platform.system().lower() == 'linux':
+    import wormtable as wt
+else:
+    import wormtable_other as wt
+
 
 ################################################################################
 # This script allows the user to filter variants in a vcf file based the variant
