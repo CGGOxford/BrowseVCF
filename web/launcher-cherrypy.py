@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #Launches CherryPy web server, and browser with correct URL
 
-import os, sys
+import os, sys, platform
 import cherrypy
 import cpcgiserver
 import webbrowser
@@ -24,6 +24,21 @@ HOSTNAME = '127.0.0.1'
 
 #seed a port number in case random portnum search doesn't work
 PORTNUM = 27013
+
+#for OSX, seed PYTHONPATH
+if 'darwin' in platform.system().lower():
+    pathvalue = os.path.join(os.getcwd(), 'osx_libs')
+    sys.path += [pathvalue]
+    try:
+	os.environ['LD_LIBRARY_PATH'] += pathvalue
+	os.environ['PYTHONPATH'] += pathvalue
+    except:
+	os.environ['LD_LIBRARY_PATH'] = pathvalue
+	os.environ['PYTHONPATH'] = pathvalue
+
+    sys.stderr.write('I found OSX and updated LD_LIBRARY_PATH: %s\nPYTHONPATH: %s\n' % (os.environ['LD_LIBRARY_PATH'], os.environ['PYTHONPATH']))
+
+    sys.stderr.write('PATH: %s\n' % sys.path)
 
 myconfig = {
 
@@ -61,7 +76,7 @@ class GUIApp(tk.Frame):
 
         self.file_opt = options = {}
         options['defaultextension'] = '.vcf.gz'
-        options['filetypes'] = [('Compressed VCF files', '.vcf.gz'), ('VCF files', '.vcf'), ('all files', '.*')]
+        #options['filetypes'] = [('Compressed VCF files', '.vcf.gz'), ('VCF files', '.vcf'), ('all files', '.*')]
         options['initialdir'] = os.getcwd()
         options['parent'] = master
         options['title'] = 'Choose a VCF(.gz) file to analyse'

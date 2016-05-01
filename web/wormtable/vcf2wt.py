@@ -120,7 +120,11 @@ class VCFReader(cli.FileReader):
         """
         Processes the specified header string to get the genotype labels.
         """
-        self.__genotypes = s.split()[9:]
+        # VCF mandates that lines be split with tabs, and this therefore allows
+        # VCFs with spaces in the sample names. We are therefore more strict about
+        # splitting the header string than in other areas.
+        self.__genotypes = [
+            sample.strip() for sample in s.split(b"\t")[9:]]
 
     def add_column(self, table, prefix, line):
         """

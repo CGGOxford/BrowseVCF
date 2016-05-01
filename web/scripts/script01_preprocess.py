@@ -6,13 +6,6 @@ import platform
 import argparse
 from subprocess import Popen, PIPE
 from datetime import datetime
-import wormtable as wt
-
-################################################################################
-# This script allows the user to convert the input .vcf or .vcf.gz file into a
-# pre-processed vcf file that can be easily accepted by Wormtable. It also
-# generates the global schema file and edits it in place.
-################################################################################
 
 # Cross-platform stuff...let's first figure out what we're running on
 current_os = platform.system()
@@ -23,9 +16,21 @@ WIN_PLATFORM_NONFREE = False
 # GNU default path for Ubuntu/Debian
 #TODO: Load paths dynamically, or ship the GNU binaries locally as well
 TOOLPATH = "/usr/local/bin/"
-if 'win' in current_os.lower():
+if 'windows' in current_os.lower():
   WIN_PLATFORM_NONFREE = True
   TOOLPATH = "./win_tools/"
+
+if current_os.lower() == 'darwin':
+    os.environ['PYTHONPATH'] = '%s/osx_libs:$PYTHONPATH' % os.getcwd()
+
+import wormtable as wt
+
+################################################################################
+# This script allows the user to convert the input .vcf or .vcf.gz file into a
+# pre-processed vcf file that can be easily accepted by Wormtable. It also
+# generates the global schema file and edits it in place.
+################################################################################
+
 
 def parse_args():
   """
@@ -82,19 +87,19 @@ def handle_csq_line(line):
 def substitute_dots(line):
   """
   Whenever a value in a subfield of the INFO field is '.', replace it with a
-  '-1'.
+  'nan'.
   """
   try:
       line_s = line.strip('\r\n').split('\t')
       info = {(item.split('=')[0] if item.find('=')!= -1
     	else item):(item.split('=')[1] if item.find('=')!= -1
-    	else '-1') for item in line_s[7].split(';')}
+    	else 'nan') for item in line_s[7].split(';')}
 
       for key in info:
         values = list()
         for val in info[key].split(','):
           if val == '.':
-            values.append('-1')
+            values.append('nan')
           else:
             values.append(val)
         info[key] = ','.join(values)
@@ -152,7 +157,7 @@ def parse_inp_file(inp_file, out_folder):
   """
   Parse the input file:
    - split the field CSQ in subfields
-   - substitute any '.' value with '-1'
+   - substitute any '.' value with 'nan'
   Print out sample names at the end, useful by web services.
   """
 
@@ -160,7 +165,7 @@ def parse_inp_file(inp_file, out_folder):
   NOFILTERB = False
 
   try:
-    inp = gzip.open(inp_file, 'rU')
+    inp = gzip.open(inp_file, 'rb')
     inp.read(2) #will fail if not gzipped
     inp.seek(0) #seek back
   except:
@@ -189,7 +194,7 @@ def parse_inp_file(inp_file, out_folder):
                            'genotypes. Filter B cannot run...\n')
           NOFILTERB = True
     else:
-      # substitute '.' values with '-1'
+      # substitute '.' values with 'nan'
       line = substitute_dots(line)
       # split the CSQ INFO field in several subfields (if CSQ exists)
       if 'sub_fields' in locals():
@@ -242,13 +247,30 @@ def create_general_schema(out_folder):
 def edit_global_schema_in_place(schema_file):
   """
   Store all the content of schema_file in memory, then replace all instances of
-  'var(1)' with 'var(2)', re-open the file in write mode and write all lines.
+  'var(1)' with 'var(2)' except for REF, ALT, and INFO fields. Finally, re-open
+  the file in write mode and write all lines.
+
+  This step allows long string fields (up to 64k characters) to be properly
+  represented by wormtable, whereas all other string-based fields will be
+  represented with less bytes, to save disk space.
+
+  Also, for missing values ('nan') to be properly recognised as floats, all the
+  integer INFO fields are converted to float INFO fields.
   """
 
   all_lines = list()
   f = open(schema_file, 'r')
   for line in f:
-    all_lines.append(line.replace('var(1)', 'var(2)'))
+    if 'name="REF"' in line:
+      line = line.replace('var(1)', 'var(2)')
+    elif 'name="ALT"' in line:
+      line = line.replace('var(1)', 'var(2)')
+    elif 'name="INFO.' in line:
+      line = line.replace('var(1)', 'var(2)')
+      line = line.replace('element_type="int"', 'element_type="float"')
+      if 'element_type="uint"' in line:
+        line = line.replace('element_type="uint"', 'element_type="float"').replace('element_size="1"', 'element_size="4"')
+    all_lines.append(line)
   f.close()
   f = open(schema_file, 'w')
   f.writelines(all_lines)
