@@ -84,6 +84,7 @@ app.controller('VCFFilterController', function($scope, $sce, $state, $sessionSto
     $scope.isLoadingVCF = undefined;
     $scope.isIndexingVCF = undefined;
     $scope.isFilteringVCF = undefined;
+    $scope.indexesChosen = false;
     $scope.isRemovingHistoryItem = false;
 
     //form data for http POSTs
@@ -283,6 +284,25 @@ app.controller('VCFFilterController', function($scope, $sce, $state, $sessionSto
 
 
     }
+
+    $scope.enableIndexingButton = function() {
+
+	if ($scope.formData.selval != null)
+	{ 
+	    if ($scope.formData.selval.length > 0 || $scope.isIndexingVCF == false)
+	    {
+		return false;
+	    }
+	    else {
+		return true;
+	    }
+	}
+	else
+	{
+	    return true;
+	}
+
+    };
 
     $scope.submitFieldIndexForm = function() {
 
