@@ -24,7 +24,7 @@
         <input type="text" id="coreInputBox" class="form-control" name="numCores" value="0" ng-model="formData.numCores" />
 
       <br /><br />
-      <button type="submit" class="btn btn-success" ng-disabled="isIndexingVCF"><span data-ng-hide="isIndexingVCF">Index Selected Fields</span><span data-ng-show="isIndexingVCF">Indexing Selected Fields...&nbsp;&nbsp;<i class="fa fa-spinner fa-spin"></i></span></button>
+      <button type="submit" class="btn btn-success" ng-disabled="enableIndexingButton() || isIndexingVCF"><span data-ng-hide="isIndexingVCF">Index Selected Fields</span><span data-ng-show="isIndexingVCF">Indexing Selected Fields...&nbsp;&nbsp;<i class="fa fa-spinner fa-spin"></i></span></button>
     </p>
     </div>
 
