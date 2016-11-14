@@ -337,6 +337,7 @@ def script02_api_call(i_file, o_folder, u_fields, n_cores):
 
   add_chrompos_index(out_folder)
   t2 = datetime.now()
+  sys.stderr.write('%s\n' % str(t2 - t1))
   return
 
 def main():
