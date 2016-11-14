@@ -31,12 +31,16 @@ def parse_args():
   parser.add_argument('-f', dest = 'field_name', required = True,
                       help = 'name of the field of interest')
   parser.add_argument('-s', dest = 'operator', required = True,
+                      choices = ['greater_than', 'less_than', 'equal_to',
+                                 'contains_keyword', 'is_absent', 'is_present'],
                       help = 'operator [one of: greater_than, less_than, ' +
                              'equal_to, contains_keyword, is_absent, is_present]')
   parser.add_argument('-c', dest = 'cutoff', required = False,
                       default = None, help = 'cutoff for the field of ' +
                       'interest or comma-separated string (default=None)')
   parser.add_argument('-k', dest = 'keep_novalue', required = False,
+                      choices = ['True', 'true', 'TRUE',
+                                 'False', 'false', 'FALSE'],
                       default = False, help = 'keep variants with no value ' +
                       'at specified field [True OR False] (default=False)')
   parser.add_argument('-p', dest = 'previous_results', required=False,
