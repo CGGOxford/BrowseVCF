@@ -225,7 +225,7 @@ def script04_api_call(i_folder, o_file, genotype, samples,
   final_ids = intersect_ids(samples_ids)
   retrieve_variants_by_rowid(inp_folder, final_ids, out_file)
   t2 = datetime.now()
-  print t2 - t1
+  sys.stderr.write('%s\n' % str(t2 - t1))
   return
 
 def main():

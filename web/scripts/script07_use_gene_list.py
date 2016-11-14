@@ -225,7 +225,7 @@ def script07_api_call(i_folder, o_file, genes_to_query, field_name,
           negative_query)
   retrieve_variants_by_rowid(inp_folder, ids, out_file)
   t2 = datetime.now()
-  print t2 - t1
+  sys.stderr.write('%s\n' % str(t2 - t1))
   return
 
 def main():

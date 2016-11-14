@@ -203,7 +203,7 @@ def script05_api_call(i_folder, o_file, chrom, start, end,
     ids = get_variants_in_given_regions(inp_folder, chrom, start, end)
   retrieve_variants_by_rowid(inp_folder, ids, out_file)
   t2 = datetime.now()
-  print t2 - t1
+  sys.stderr.write('%s\n' % str(t2 - t1))
   return
 
 def main():

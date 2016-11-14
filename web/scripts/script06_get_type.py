@@ -205,7 +205,7 @@ def script06_api_call(i_folder, o_file, var_type, previous_results = None):
     ids = get_variants_of_given_type(inp_folder, var_type)
   retrieve_variants_by_rowid(inp_folder, ids, out_file)
   t2 = datetime.now()
-  print t2 - t1
+  sys.stderr.write('%s\n' % str(t2 - t1))
   return
 
 def main():

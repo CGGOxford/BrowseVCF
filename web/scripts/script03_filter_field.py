@@ -480,7 +480,7 @@ def script03_api_call(i_folder, o_file, f_name, operator, cutoff, keep_novalue,
     ids = filter_variants(inp_folder, field_name, operator, cutoff, keep_novalue)
   retrieve_variants_by_rowid(inp_folder, ids, out_file)
   t2 = datetime.now()
-  print t2 - t1
+  sys.stderr.write('%s\n' % str(t2 - t1))
   return
 
 def main():
