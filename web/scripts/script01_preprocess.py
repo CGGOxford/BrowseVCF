@@ -158,6 +158,7 @@ def parse_inp_file(inp_file, out_folder):
   Parse the input file:
    - split the field CSQ in subfields
    - substitute any '.' value with 'nan'
+   - store all fields in FORMAT (will be used by 'edit_global_schema_in_place')
   Print out sample names at the end, useful by web services.
   """
 
@@ -179,11 +180,16 @@ def parse_inp_file(inp_file, out_folder):
   #write straight out to gzip
   out = gzip.open(out_file, 'wb')
 
+  format_fields = set()
   for line in inp:
     if line.startswith('#'):
       # process the header CSQ line
       if line.startswith('##INFO=<ID=CSQ,'):
         sub_fields, line = handle_csq_line(line)
+      # collect FORMAT fields in the set format_fields
+      if line.startswith('##FORMAT=<ID='):
+        format_fields.add(line.split('=', 2)[2].split(',')[0])
+      # collect sample names
       elif line[1] != '#':  # sample line doesn't have '##' at start
         try:
           tkns = line[1:].strip().split('\t')
@@ -204,7 +210,7 @@ def parse_inp_file(inp_file, out_folder):
   inp.close()
   out.close()
   # return sample names with file name, and whether filter b can be activated
-  return (out_file, samples, NOFILTERB)
+  return (out_file, samples, NOFILTERB, format_fields)
 
 def compress_output_file(out_file):
   """
@@ -244,10 +250,10 @@ def create_general_schema(out_folder):
   wt.vcf2wt_main(runargs.split())
   return schema_file
 
-def edit_global_schema_in_place(schema_file):
+def edit_global_schema_in_place(schema_file, format_fields):
   """
   Store all the content of schema_file in memory, then replace all instances of
-  'var(1)' with 'var(2)' except for REF, ALT, and INFO fields. Finally, re-open
+  'var(1)' with 'var(2)' for REF, ALT, INFO and FORMAT fields. Finally, re-open
   the file in write mode and write all lines.
 
   This step allows long string fields (up to 64k characters) to be properly
@@ -261,15 +267,25 @@ def edit_global_schema_in_place(schema_file):
   all_lines = list()
   f = open(schema_file, 'r')
   for line in f:
-    if 'name="REF"' in line:
-      line = line.replace('var(1)', 'var(2)')
-    elif 'name="ALT"' in line:
-      line = line.replace('var(1)', 'var(2)')
-    elif 'name="INFO.' in line:
-      line = line.replace('var(1)', 'var(2)')
-      line = line.replace('element_type="int"', 'element_type="float"')
-      if 'element_type="uint"' in line:
-        line = line.replace('element_type="uint"', 'element_type="float"').replace('element_size="1"', 'element_size="4"')
+    if 'column description' in line:
+      if 'name="REF"' in line:
+        line = line.replace('var(1)', 'var(2)')
+      elif 'name="ALT"' in line:
+        line = line.replace('var(1)', 'var(2)')
+      # change element size and type to INFO fields too
+      elif 'name="INFO.' in line:
+        line = line.replace('var(1)', 'var(2)')
+        line = line.replace('element_type="int"', 'element_type="float"')
+        if 'element_type="uint"' in line:
+          line = line.replace('element_type="uint"', 'element_type="float"'
+                              ).replace('element_size="1"', 'element_size="4"')
+      # change element size and type to FORMAT field too (they might be long)
+      elif line.split('name="')[1].split('"')[0].rsplit('.')[-1] in format_fields:
+        line = line.replace('var(1)', 'var(2)')
+        line = line.replace('element_type="int"', 'element_type="float"')
+        if 'element_type="uint"' in line:
+          line = line.replace('element_type="uint"', 'element_type="float"'
+                              ).replace('element_size="1"', 'element_size="4"')
     all_lines.append(line)
   f.close()
   f = open(schema_file, 'w')
@@ -288,12 +304,13 @@ def script01_api_call(i_file, o_folder):
       sys.stderr.write("Warning! You are using Windows. Fixing tool paths.\n")
   inp_file = check_input_file(i_file)
   out_folder = check_output_file(o_folder)
-  (out_file, samples, NOFILTERB) = parse_inp_file(inp_file, out_folder)
+  (out_file, samples, NOFILTERB, format_fields) = parse_inp_file(inp_file, 
+                                                                 out_folder)
   sys.stderr.write("Input file parsed.\n")
   #compress_output_file(out_file) #superseded by direct gzip write
   sys.stderr.write("Output file compression complete.\n")
   schema_file = create_general_schema(out_folder)
-  edit_global_schema_in_place(schema_file)
+  edit_global_schema_in_place(schema_file, format_fields)
   sys.stderr.write("General schema created and edited.\n")
   t2 = datetime.now()
   sys.stderr.write('%s\n' % str(t2 - t1))
