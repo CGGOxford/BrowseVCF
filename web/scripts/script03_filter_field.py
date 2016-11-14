@@ -32,13 +32,13 @@ def parse_args():
                       help = 'name of the field of interest')
   parser.add_argument('-s', dest = 'operator', required = True,
                       help = 'operator [one of: greater_than, less_than, ' +
-                             'equal_to, contains_keyword]')
-  parser.add_argument('-c', dest = 'cutoff', required = True,
-                      help = 'cutoff for the field of interest or ' +
-                             'comma-separated string')
-  parser.add_argument('-k', dest = 'keep_novalue', required = True,
-                      help = 'keep variants with no value at specified field ' +
-                      '[True OR False]')
+                             'equal_to, contains_keyword, is_absent, is_present]')
+  parser.add_argument('-c', dest = 'cutoff', required = False,
+                      default = None, help = 'cutoff for the field of ' +
+                      'interest or comma-separated string (default=None)')
+  parser.add_argument('-k', dest = 'keep_novalue', required = False,
+                      default = False, help = 'keep variants with no value ' +
+                      'at specified field [True OR False] (default=False)')
   parser.add_argument('-p', dest = 'previous_results', required=False,
                       help = 'previously saved results from another query ' +
                       '[.txt]')
@@ -84,6 +84,9 @@ def filter_variants_from_previous_results(inp_folder, field_name, operator,
   the specified cutoff. The row_id value of each filtered variant is stored in
   the set ids, which is returned. Use ids from previous_results as starting
   point to further filter the data and to make it faster.
+
+  NOTE: if operator is 'is_present' or 'is_absent', cutoff and keep_novalue will
+        be ignored!
   """
 
   # extract row IDs to check from previous_results (which is a file path) and
@@ -113,13 +116,23 @@ def filter_variants_from_previous_results(inp_folder, field_name, operator,
       # the type of the field value for the current row is 'NoneType', empty,
       # or 'nan'
       if row[field_name_idx] is None or row[field_name_idx] == '':
-        if keep_novalue == 'True':
+        if operator == 'is_absent':
+          ids.add(row[row_id_idx])
+        if keep_novalue == 'True' and operator != 'is_present':
           ids.add(row[row_id_idx])
         else:
           pass
       # the type of the field value for the current row is 'str'
       elif isinstance(row[field_name_idx], str):
-        if operator == 'greater_than' or operator == 'less_than':
+        # with "is_present", report variant if at least one value exists
+        if operator == 'is_present':
+          if row[field_name_idx].replace('nan', '').replace(',', '') != '':
+            ids.add(row[row_id_idx])
+        # with "is_absent", report variant if it contains only 'nan' values
+        elif operator == 'is_absent':
+          if row[field_name_idx].replace('nan', '').replace(',', '') == '':
+            ids.add(row[row_id_idx])
+        elif operator == 'greater_than' or operator == 'less_than':
           # special case: NUM/NUM (which is recognised as string by wormtable)
           # solution: we check that the ratio NUM/NUM is >,<,= cutoff
           for value in row[field_name_idx].split(','):
@@ -167,7 +180,15 @@ def filter_variants_from_previous_results(inp_folder, field_name, operator,
                 break
       # the type of the field value for the current row is 'tuple'
       elif isinstance(row[field_name_idx], tuple):
-        if operator == 'greater_than':
+        # with "is_present", report variant if at least one value exists
+        if operator == 'is_present':
+          if set(map(str, row[field_name_idx])) != set(['nan']):
+            ids.add(row[row_id_idx])
+        # with "is_absent", report variant if it contains only 'nan' values
+        elif operator == 'is_absent':
+          if set(map(str, row[field_name_idx])) == set(['nan']):
+            ids.add(row[row_id_idx])
+        elif operator == 'greater_than':
           for value in row[field_name_idx]:
             if math.isnan(value):
               if keep_novalue == 'True':
@@ -208,6 +229,8 @@ def filter_variants_from_previous_results(inp_folder, field_name, operator,
       # this includes cases of string numbers (e.g. '1234')
       elif is_number(row[field_name_idx]):
         if math.isnan(row[field_name_idx]):
+          if operator == 'is_present':
+            ids.add(row[row_id_idx])
           if keep_novalue == 'True':
             ids.add(row[row_id_idx])
         elif operator == 'greater_than':
@@ -235,6 +258,9 @@ def filter_variants(inp_folder, field_name, operator, cutoff, keep_novalue):
   named 'inp_folder/field_name.wt') and filter or discard variants according to
   the specified cutoff. The row_id value of each filtered variant is stored in
   the set ids, which is returned.
+
+  NOTE: if operator is 'is_present' or 'is_absent', cutoff and keep_novalue will
+        be ignored!
   """
 
   # open wormtable for the field of interest
@@ -250,13 +276,23 @@ def filter_variants(inp_folder, field_name, operator, cutoff, keep_novalue):
     # the type of the field value for the current row is 'NoneType', empty,
     # or 'nan'
     if row[field_name_idx] is None or row[field_name_idx] == '':
-      if keep_novalue == 'True':
+      if operator == 'is_absent':
+        ids.add(row[row_id_idx])
+      if keep_novalue == 'True' and operator != 'is_present':
         ids.add(row[row_id_idx])
       else:
         pass
     # the type of the field value for the current row is 'str'
     elif isinstance(row[field_name_idx], str):
-      if operator == 'greater_than' or operator == 'less_than':
+      # with "is_present", report variant if at least one value exists
+      if operator == 'is_present':
+        if row[field_name_idx].replace('nan', '').replace(',', '') != '':
+          ids.add(row[row_id_idx])
+      # with "is_absent", report variant if it contains only 'nan' values
+      elif operator == 'is_absent':
+        if row[field_name_idx].replace('nan', '').replace(',', '') == '':
+          ids.add(row[row_id_idx])
+      elif operator == 'greater_than' or operator == 'less_than':
         # special case: NUM/NUM (which is recognised as string by wormtable)
         # solution: we check that the ratio NUM/NUM is >,<,= cutoff
         for value in row[field_name_idx].split(','):
@@ -304,7 +340,15 @@ def filter_variants(inp_folder, field_name, operator, cutoff, keep_novalue):
               break
     # the type of the field value for the current row is 'tuple'
     elif isinstance(row[field_name_idx], tuple):
-      if operator == 'greater_than':
+      # with "is_present", report variant if at least one value exists
+      if operator == 'is_present':
+        if set(map(str, row[field_name_idx])) != set(['nan']):
+          ids.add(row[row_id_idx])
+      # with "is_absent", report variant if it contains only 'nan' values
+      elif operator == 'is_absent':
+        if set(map(str, row[field_name_idx])) == set(['nan']):
+          ids.add(row[row_id_idx])
+      elif operator == 'greater_than':
         for value in row[field_name_idx]:
           if math.isnan(value):
             if keep_novalue == 'True':
@@ -345,6 +389,8 @@ def filter_variants(inp_folder, field_name, operator, cutoff, keep_novalue):
     # this includes cases of string numbers (e.g. '1234')
     elif is_number(row[field_name_idx]):
       if math.isnan(row[field_name_idx]):
+        if operator == 'is_present':
+          ids.add(row[row_id_idx])
         if keep_novalue == 'True':
           ids.add(row[row_id_idx])
       elif operator == 'greater_than':
@@ -419,6 +465,10 @@ def script03_api_call(i_folder, o_file, f_name, operator, cutoff, keep_novalue,
   else:
       keep_novalue = 'False'
   previous_results = prev_results
+  # raise error if cutoff is not defined when operator is not in following list
+  if operator in ['greater_than', 'less_than', 'equal_to', 'contains_keyword']:
+    if not cutoff:
+      raise Exception('Error: cutoff must be defined!')
   if previous_results != None:
     ids = filter_variants_from_previous_results(inp_folder, field_name, operator,
           cutoff, keep_novalue, previous_results)
