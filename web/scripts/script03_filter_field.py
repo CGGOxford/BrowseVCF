@@ -226,9 +226,14 @@ def filter_variants_from_previous_results(inp_folder, field_name, operator,
                 ids.add(row[row_id_idx])
                 break
             for keyword in set(cutoff.split(',')):
-              if value.find(keyword) != -1:
-                ids.add(row[row_id_idx])
-                break
+              try:
+                if value.find(keyword) != -1:
+                  ids.add(row[row_id_idx])
+                  break
+              except AttributeError:
+                sys.stderr.write('\nError: ' + operator + ' incompatible with' +
+                                 ' field type (number).\n')
+                sys.exit()
       # the type of the field value for the current row is 'int' or 'float'
       # this includes cases of string numbers (e.g. '1234')
       elif is_number(row[field_name_idx]):
@@ -388,9 +393,14 @@ def filter_variants(inp_folder, field_name, operator, cutoff, keep_novalue):
               ids.add(row[row_id_idx])
               break
           for keyword in set(cutoff.split(',')):
-            if value.find(keyword) != -1:
-              ids.add(row[row_id_idx])
-              break
+            try:
+              if value.find(keyword) != -1:
+                ids.add(row[row_id_idx])
+                break
+            except AttributeError:
+              sys.stderr.write('\nError: ' + operator + ' incompatible with' +
+                               ' field type (number).\n')
+              sys.exit()
     # the type of the field value for the current row is 'int' or 'float'
     # this includes cases of string numbers (e.g. '1234')
     elif is_number(row[field_name_idx]):
