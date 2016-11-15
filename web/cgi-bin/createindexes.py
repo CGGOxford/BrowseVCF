@@ -92,7 +92,8 @@ if "selval[]" in query.keys():
     returnvals = {}
 
     try:
-        script02_api_call(os.path.join(curDir, inpfile),
+        with helpers.no_console_output():
+            script02_api_call(os.path.join(curDir, inpfile),
                                     curDir, inputfields, numCores)
     except Exception, e:
         returnvals['ERRMSG'] = str(e)

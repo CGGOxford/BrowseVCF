@@ -96,6 +96,9 @@ if "whichFilter" in query.keys():
         if 'opt_a_keep_none_variants' in filtervals.keys():
             keep_none_variants = filtervals['opt_a_keep_none_variants']
 
+        if 'opt_a_cutoff' not in filtervals.keys():
+            filtervals['opt_a_cutoff'] = None
+
         #use the API call to avoid a system call!
         from scripts.script03_filter_field import script03_api_call
 
