@@ -30,25 +30,26 @@
             </p>
             <div>
               <p class="tabtab">
-                <select class="element select small form-control" id="element_5" name="element_5" ng_model="formData.opt_a_operator">
+               <!-- <select class="element select small form-control" id="element_5" name="element_5">
                   <option value="" selected hidden />
                   <option ng-repeat="myval in opt_a_operator" value="{{myval}}" ng-bind="myval"></option>
-                </select>
+		</select> -->
+	       <select class="element select small form-control" ng-model="myval" ng-options="myval as myval for myval in opt_a_operator" id="element_5" name="element_5" ng-change="store_a_operator(myval)"></select>
             </div>
             </p>
             <p class="tabtab">
-              <label class="description" for="element_2">Specify the cutoff to apply (CASE-SENSITIVE!) </label>
+              <label class="description" for="element_2">Specify the cutoff to apply (CASE-SENSITIVE!) <span class="text-danger" ng-if="chosen_a_operator == 'is_present' || chosen_a_operator == 'is_absent'" >(DISABLED)</span></label>
             </p>
             <div>
               <p class="tabtab">
-                <input id="element_2" name="element_2" class="element text small form-control" type="text" maxlength="255" value="" ng-model="formData.opt_a_cutoff" ng-pattern="/^[\w&.](,?[\w&.])*$/" />
-                <span ng-show="filterForm.element_2.$error.pattern">Please enter one value or a comma-separated list (no spaces between the commas)!</span>
+	      <input id="element_2" name="element_2" class="element text small form-control" type="text" maxlength="255" value="" ng-model="formData.opt_a_cutoff" ng-pattern="/^[\w&.](,?[\w&.])*$/" ng-disabled="chosen_a_operator == 'is_present' || chosen_a_operator == 'is_absent'" />
+	      <span class="text-danger" ng-show="filterForm.element_2.$error.pattern"><i>Please enter one value or a comma-separated list (no spaces between the commas)!</i></span>
             </div>
             </p>
             <p class="tabtab">
-              <label class="description" for="element_6">Keep variants having no value in the selected field? </label>
+              <label class="description" for="element_6">Keep variants having no value in the selected field?  <span class="text-danger" ng-if="chosen_a_operator == 'is_present' || chosen_a_operator == 'is_absent'" >(DISABLED)</span></label>
               <p class="tabtab">
-                <input type="checkbox" class="element checkbox-inline small" name="checkbox1" value="false" checked="false" ng-model="formData.opt_a_keep_none_variants">
+                <input type="checkbox" class="element checkbox-inline small" name="checkbox1" value="false" checked="false" ng-model="formData.opt_a_keep_none_variants" ng-disabled="chosen_a_operator == 'is_present' || chosen_a_operator == 'is_absent'" >
               </p>
             </p>
           </div>
