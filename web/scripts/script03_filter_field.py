@@ -233,7 +233,7 @@ def filter_variants_from_previous_results(inp_folder, field_name, operator,
               except AttributeError:
                 sys.stderr.write('\nError: ' + operator + ' incompatible with' +
                                  ' field type (tuple).\n')
-                sys.exit()
+                raise
       # the type of the field value for the current row is 'int' or 'float'
       # this includes cases of string numbers (e.g. '1234')
       elif is_number(row[field_name_idx]):
@@ -257,7 +257,7 @@ def filter_variants_from_previous_results(inp_folder, field_name, operator,
             except AttributeError:
               sys.stderr.write('\nError: ' + operator + ' incompatible with' +
                                ' field type (number).\n')
-              sys.exit()
+              raise 
   # close table and index
   table.close()
   index.close()
@@ -400,7 +400,7 @@ def filter_variants(inp_folder, field_name, operator, cutoff, keep_novalue):
             except AttributeError:
               sys.stderr.write('\nError: ' + operator + ' incompatible with' +
                                ' field type (tuple).\n')
-              sys.exit()
+              raise 
     # the type of the field value for the current row is 'int' or 'float'
     # this includes cases of string numbers (e.g. '1234')
     elif is_number(row[field_name_idx]):
@@ -424,7 +424,8 @@ def filter_variants(inp_folder, field_name, operator, cutoff, keep_novalue):
           except AttributeError:
             sys.stderr.write('\nError: ' + operator + ' incompatible with' +
                              ' field type (number).\n')
-            sys.exit()
+            raise
+
   # close table
   table.close()
   return ids
@@ -492,6 +493,7 @@ def script03_api_call(i_folder, o_file, f_name, operator, cutoff, keep_novalue,
           cutoff, keep_novalue, previous_results)
   else:
     ids = filter_variants(inp_folder, field_name, operator, cutoff, keep_novalue)
+
   retrieve_variants_by_rowid(inp_folder, ids, out_file)
   t2 = datetime.now()
   sys.stderr.write('%s\n' % str(t2 - t1))

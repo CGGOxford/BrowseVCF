@@ -40,6 +40,9 @@ if "whichFilter" in query.keys():
         if fname in f:
             filtervals[f] = query.getvalue(f)
 
+    # set up data structures for output and return a JSON document
+    returnvals = {}
+
     #retrieve the current working directory
     #and previous file if it exists
     curDir = ""
@@ -103,12 +106,18 @@ if "whichFilter" in query.keys():
         from scripts.script03_filter_field import script03_api_call
 
         #silence output and run API filter call
-        with helpers.no_console_output():
-            script03_api_call(curDir, os.path.join(curDir, outFile),
+
+        try:
+            with helpers.no_console_output():
+                script03_api_call(curDir, os.path.join(curDir, outFile),
                                 filtervals['opt_a_field_to_filter_variants'],
                                 filtervals['opt_a_operator'],
                                 filtervals['opt_a_cutoff'], keep_none_variants,
                                 joinedPrevFile)
+
+        
+        except Exception, e:
+            returnvals['ERRMSG'] = str(e) 
 
     # Filter B (Filter variants according to a given field)
     elif 'b' in fname:
@@ -230,9 +239,6 @@ if "whichFilter" in query.keys():
 
         outheadermap.append(myfields)
 
-    # set up data structures for output and return a JSON document
-    returnvals = {}
-
     #change filter name from "opt_x" to "Filter x"
     fname = 'Filter ' + fname[4].upper()
 
@@ -273,6 +279,9 @@ if "whichFilter" in query.keys():
             os.remove(os.path.join(curDir, outFile))
         except:
             pass
+
+    if 'ERRMSG' not in returnvals.keys():
+        returnvals['ERRMSG'] = 'None'
 
     #print return values in JSON format
     #print """Content-type: application/json\r\n"""

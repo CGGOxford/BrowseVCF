@@ -26,7 +26,7 @@ def no_console_output():
     save_stdout = sys.stdout
     save_stderr = sys.stderr
     sys.stdout = DummyOutputFile()
-    sys.stderr = DummyOutputFile()
+    sys.stderr = DummyOutputFile() 
     yield
     sys.stdout = save_stdout
     sys.stderr = save_stderr

@@ -401,6 +401,12 @@ app.controller('VCFFilterController', function($scope, $sce, $state, $sessionSto
             $scope.sendSucceed = true;
             $scope.isFilteringVCF = false;
 
+	    if (success.ERRMSG != "None")
+	    {
+		//throw an alert
+		alert("The VCF file could not be processed.\nThis is usually because the input VCF contains a duplicate line or some other formatting issue.\nPlease try another file.\nFor reference, the error I got was:\n\"" + success.ERRMSG + "\"");
+	    }
+
             //load the json results into the scope if we had results
             //otherwise, let the user know
             if (success.numresults > 0)
