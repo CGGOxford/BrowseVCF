@@ -232,7 +232,7 @@ def filter_variants_from_previous_results(inp_folder, field_name, operator,
                   break
               except AttributeError:
                 sys.stderr.write('\nError: ' + operator + ' incompatible with' +
-                                 ' field type (number).\n')
+                                 ' field type (tuple).\n')
                 sys.exit()
       # the type of the field value for the current row is 'int' or 'float'
       # this includes cases of string numbers (e.g. '1234')
@@ -399,7 +399,7 @@ def filter_variants(inp_folder, field_name, operator, cutoff, keep_novalue):
                 break
             except AttributeError:
               sys.stderr.write('\nError: ' + operator + ' incompatible with' +
-                               ' field type (number).\n')
+                               ' field type (tuple).\n')
               sys.exit()
     # the type of the field value for the current row is 'int' or 'float'
     # this includes cases of string numbers (e.g. '1234')
