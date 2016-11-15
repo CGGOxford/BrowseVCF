@@ -97,7 +97,11 @@ app.controller('VCFFilterController', function($scope, $sce, $state, $sessionSto
     $scope.opt_a_field_to_filter_variants = ['Option A', 'Option B', 'Option C'];
 
     //these are static values for script 03
-    $scope.opt_a_operator = ['greater_than', 'less_than', 'equal_to', 'contains_keyword'];
+    $scope.opt_a_operator = ['greater_than', 'less_than', 'equal_to', 'is_present', 'is_absent', 'contains_keyword'];
+
+    //the chose operator for the time being, used to determine which form elements need to be toggled
+    //to disabled or enabled state
+    $scope.chosen_a_operator = "";
 
     //filter B is enabled unless we don't have sample genotypes in the VCF
     $scope.nofilterb = false;
@@ -168,6 +172,14 @@ app.controller('VCFFilterController', function($scope, $sce, $state, $sessionSto
         $scope.formData.whichFilter = filtername;
 
     };
+
+    $scope.store_a_operator = function(opval) {
+
+	$scope.chosen_a_operator = opval;
+	$scope.formData.opt_a_operator = opval;
+	//console.log( $scope.chosen_a_operator );
+    };
+
 
     /* Save the history array to a text file */
     $scope.saveHistory = function() {
