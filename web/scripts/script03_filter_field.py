@@ -232,11 +232,8 @@ def filter_variants_from_previous_results(inp_folder, field_name, operator,
       # the type of the field value for the current row is 'int' or 'float'
       # this includes cases of string numbers (e.g. '1234')
       elif is_number(row[field_name_idx]):
-        if math.isnan(row[field_name_idx]):
-          if operator == 'is_present':
-            ids.add(row[row_id_idx])
-          if keep_novalue == 'True':
-            ids.add(row[row_id_idx])
+        if operator == 'is_present':
+          ids.add(row[row_id_idx])
         elif operator == 'greater_than':
           if row[field_name_idx] > float(cutoff):
             ids.add(row[row_id_idx])
@@ -248,9 +245,14 @@ def filter_variants_from_previous_results(inp_folder, field_name, operator,
             ids.add(row[row_id_idx])
         elif operator == 'contains_keyword':
           for keyword in set(cutoff.split(',')):
-            if row[field_name_idx].find(keyword) != -1:
-              ids.add(row[row_id_idx])
-              break
+            try:
+              if row[field_name_idx].find(keyword) != -1:
+                ids.add(row[row_id_idx])
+                break
+            except AttributeError:
+              sys.stderr.write('\nError: ' + operator + ' incompatible with' +
+                               ' field type (number).\n')
+              sys.exit()
   # close table and index
   table.close()
   index.close()
@@ -392,11 +394,8 @@ def filter_variants(inp_folder, field_name, operator, cutoff, keep_novalue):
     # the type of the field value for the current row is 'int' or 'float'
     # this includes cases of string numbers (e.g. '1234')
     elif is_number(row[field_name_idx]):
-      if math.isnan(row[field_name_idx]):
-        if operator == 'is_present':
-          ids.add(row[row_id_idx])
-        if keep_novalue == 'True':
-          ids.add(row[row_id_idx])
+      if operator == 'is_present':
+        ids.add(row[row_id_idx])
       elif operator == 'greater_than':
         if row[field_name_idx] > float(cutoff):
           ids.add(row[row_id_idx])
@@ -408,9 +407,14 @@ def filter_variants(inp_folder, field_name, operator, cutoff, keep_novalue):
           ids.add(row[row_id_idx])
       elif operator == 'contains_keyword':
         for keyword in set(cutoff.split(',')):
-          if row[field_name_idx].find(keyword) != -1:
-            ids.add(row[row_id_idx])
-            break
+          try:
+            if row[field_name_idx].find(keyword) != -1:
+              ids.add(row[row_id_idx])
+              break
+          except AttributeError:
+            sys.stderr.write('\nError: ' + operator + ' incompatible with' +
+                             ' field type (number).\n')
+            sys.exit()
   # close table
   table.close()
   return ids
