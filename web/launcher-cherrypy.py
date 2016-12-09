@@ -119,10 +119,26 @@ class GUIApp(tk.Frame):
 
         return fname
 
+    def clearTempFiles(self):
+
+	tempdir = os.path.join( os.getcwd(), 'tmp' )
+
+	for mydir in os.listdir( tempdir ):
+	    dirpath = os.path.join( tempdir, mydir )
+	    try:
+		if os.path.isdir( dirpath ):
+		    os.unlink( dirpath )
+	    except Exception, e:
+		print str(e)
+
+	return
+
     def createWidgets(self):
         self.chooseFileButton = tk.Button(self, text='Choose a VCF file', command=self.chooseFile)
-        self.quitButton = tk.Button(self, text='Quit Application', command=self.quit)
+        self.clearTempFilesButton = tk.Button( self, text='Clear Temporary Files', command=self.clearTempFiles )
+	self.quitButton = tk.Button(self, text='Quit Application', command=self.quit)
         self.chooseFileButton.grid()
+	self.clearTempFilesButton.grid()
         self.quitButton.grid()
 
 
