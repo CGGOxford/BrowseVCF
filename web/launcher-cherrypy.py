@@ -11,9 +11,11 @@ import psutil #when multiprocessing doesn't work on CherryPy
 import threading
 import time
 import Tkinter as tk #GUI stuff
+import tkMessageBox
 import tkFileDialog #file open dialog
 import json #to serialise js config
 
+import shutil #to remove directory trees
 import socket #to find an open port
 
 VCFFILENAME = '' #set by the open dialog
@@ -122,14 +124,26 @@ class GUIApp(tk.Frame):
     def clearTempFiles(self):
 
 	tempdir = os.path.join( os.getcwd(), 'tmp' )
-
+	
+	result = tkMessageBox.askquestion("Clear Temporary Data", "This action will remove all temporary data stored in the 'tmp' directory inside the BrowseVCF 'web' directory. Are you sure you want to proceed? Any active BrowseVCF sessions will stop working properly.\n\nThis action will also remove cached filtered-result data in these temporary directories. Please make sure you export history and important filtered data from active BrowseVCF sessions before proceeding!", icon='warning')
+	
 	for mydir in os.listdir( tempdir ):
 	    dirpath = os.path.join( tempdir, mydir )
-	    try:
-		if os.path.isdir( dirpath ):
-		    os.unlink( dirpath )
-	    except Exception, e:
-		print str(e)
+	
+	    if result == 'yes':
+
+		try:
+		    if os.path.isdir( dirpath ):
+			shutil.rmtree( dirpath )
+		
+		except Exception, e:
+		    msg = "%s\n\nPlease clear the 'tmp' directory inside the BrowseVCF 'web' directory manually." % ( str(e), )
+		    tkMessageBox.showinfo('Error removing temporary data', msg)
+	
+		    return
+
+	if result == 'yes':
+	    tkMessageBox.showinfo('Temporary files cleared', "BrowseVCF's 'tmp' directory is now empty!")
 
 	return
 
