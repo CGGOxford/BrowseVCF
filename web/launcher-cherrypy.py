@@ -125,7 +125,7 @@ class GUIApp(tk.Frame):
 
 	tempdir = os.path.join( os.getcwd(), 'tmp' )
 	
-	result = tkMessageBox.askquestion("Clear Temporary Data", "This action will remove all temporary data stored in the 'tmp' directory inside the BrowseVCF 'web' directory. Are you sure you want to proceed? Any active BrowseVCF sessions will stop working properly.\n\nThis action will also remove cached filtered-result data in these temporary directories. Please make sure you export history and important filtered data from active BrowseVCF sessions before proceeding!", icon='warning')
+	result = tkMessageBox.askquestion("Clear Temporary Data and Working Directories", "This action will remove all temporary data and working directories, include active session data, stored in 'tmp' inside the BrowseVCF 'web' directory. This is a good thing to do from time to time to recover disk space. Are you sure you want to proceed? Any active BrowseVCF sessions will stop working properly.\n\nThis action will also remove cached filtered-result data in these temporary directories. Please make sure you export history and important filtered data from active BrowseVCF sessions before proceeding!", icon='warning')
 	
 	for mydir in os.listdir( tempdir ):
 	    dirpath = os.path.join( tempdir, mydir )
