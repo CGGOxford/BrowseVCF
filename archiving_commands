@@ -1,3 +1,9 @@
+Remove vcfHistory.json
+
 For OSX:
 
 tar cvzf BrowseVCF_osx_v2.8.tar.gz --exclude="*.pyc" --exclude="*.vcf.gz" --exclude="*.DS_Store*" --exclude=".git*" LICENSE README.md python27osx/ web/
+
+For GNU:
+
+tar cvzf BrowseVCF_gnu_2.8.tar.gz web python27gnu README.md LICENSE --exclude='.git' --exclude='*.pyc' --exclude='*.gz' --exclude='./*.sh'
