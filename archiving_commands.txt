@@ -7,3 +7,7 @@ tar cvzf BrowseVCF_osx_v2.8.tar.gz --exclude="*.pyc" --exclude="*.vcf.gz" --excl
 For GNU:
 
 tar cvzf BrowseVCF_gnu_2.8.tar.gz web python27gnu README.md LICENSE --exclude='.git' --exclude='*.pyc' --exclude='*.gz' --exclude='./*.sh'
+
+For Win:
+
+zip -x "*.git*" -x "*.pyc" -r browseVCF_win7_v2.7.1.zip WinPython-32bit-2.7.10.3 web README.md LICENSE
