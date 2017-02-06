@@ -70,9 +70,10 @@ def check_output_file(folder_name):
   sys.stderr.write("Output directory checked.\n")
   return folder_name
 
-def handle_csq_line(line):
+def handle_vep_line(line, vep_symbol):
   """
-  Divide the CSQ header line in multiple CSQ_<subfield> header lines.
+  Divide the VEP header line in multiple 'CSQ_<subfield>' or 'ANN_<subfield>'
+  header lines.
   """
 
   new_line = ''
@@ -80,7 +81,8 @@ def handle_csq_line(line):
   line_s = line.strip('">\r\n').split('Format: ')[1].split('|')
   for field in line_s:
     sub_fields.append(field)
-    new_line += '##INFO=<ID=CSQ_' + field + ',Number=.,Type=String,' + \
+    new_line += '##INFO=<ID=' + vep_symbol + '_' + field + \
+                ',Number=.,Type=String,' + \
                 'Description="VEP annotation field ' + field + '">\n'
   return sub_fields, new_line
 
@@ -118,12 +120,11 @@ def substitute_dots(line):
       #return "This file is not properly formatted. Please check the \
       #        documentation for the VCF format!"
 
-
-def split_CSQ_field(sub_fields, line):
+def split_vep_field(sub_fields, line, vep_symbol):
   """
-  Split the CSQ field (if present) in single fields named 'CSQ_<subfield>'.
-  All annotations will be reported in one line. Fields with >1 value will be
-  comma-separated.
+  Split the VEP field (if present) in single fields named 'CSQ_<subfield>' or
+  'ANN_<subfield>'. All annotations will be reported in one line. Fields with
+  >1 value will be comma-separated.
   """
 
   # all_values will contain values from all annotations, in the same order as
@@ -133,30 +134,30 @@ def split_CSQ_field(sub_fields, line):
   line_s = line.strip('\r\n').split('\t')
   info = dict(item.split('=') for item in line_s[7].split(';'))
   try:
-    annotations = info['CSQ'].split(',')
+    annotations = info[vep_symbol].split(',')
     for annot in annotations:
-      csq = annot.split('|')
+      vep = annot.split('|')
       for x in xrange(len(sub_fields)):
-        all_values[x].append(csq[x])
-    new_csq = ''
+        all_values[x].append(vep[x])
+    new_vep = ''
     for x in xrange(len(sub_fields)):
-      new_csq += 'CSQ_' + sub_fields[x] + '=' + ','.join(all_values[x]) + ';'
-    new_csq = new_csq.strip(';')
-    spl = line.split('CSQ=')
-    line_until_csq = spl[0]
+      new_vep += vep_symbol + '_' + sub_fields[x] + '=' + ','.join(all_values[x]) + ';'
+    new_vep = new_vep.strip(';')
+    spl = line.split(vep_symbol + '=')
+    line_until_vep = spl[0]
     fi = spl[1].find(';')
-    if fi == -1:   # special case: there are no other fields in INFO after CSQ
+    if fi == -1:  # special case: there are no other fields after 'CSQ' or 'ANN'
       fi = spl[1].find('\t')
-    line_after_csq = spl[1][fi:]
-    new_line = line_until_csq + new_csq + line_after_csq
-  except KeyError:  # there is no CSQ field
+    line_after_vep = spl[1][fi:]
+    new_line = line_until_vep + new_vep + line_after_vep
+  except KeyError:  # there is no 'CSQ' or 'ANN' field
     new_line = line
   return new_line
 
 def parse_inp_file(inp_file, out_folder):
   """
   Parse the input file:
-   - split the field CSQ in subfields
+   - split the VEP field (either called 'CSQ' or 'ANN') in subfields
    - substitute any '.' value with 'nan'
    - store all fields in FORMAT (will be used by 'edit_global_schema_in_place')
   Print out sample names at the end, useful by web services.
@@ -183,9 +184,13 @@ def parse_inp_file(inp_file, out_folder):
   format_fields = set()
   for line in inp:
     if line.startswith('#'):
-      # process the header CSQ line
+      # process the header VEP line
       if line.startswith('##INFO=<ID=CSQ,'):
-        sub_fields, line = handle_csq_line(line)
+        vep_symbol = 'CSQ'
+        sub_fields, line = handle_vep_line(line, vep_symbol)
+      elif line.startswith('##INFO=<ID=ANN,'):
+        vep_symbol = 'ANN'
+        sub_fields, line = handle_vep_line(line, vep_symbol)
       # collect FORMAT fields in the set format_fields
       if line.startswith('##FORMAT=<ID='):
         format_fields.add(line.split('=', 2)[2].split(',')[0])
@@ -202,32 +207,15 @@ def parse_inp_file(inp_file, out_folder):
     else:
       # substitute '.' values with 'nan'
       line = substitute_dots(line)
-      # split the CSQ INFO field in several subfields (if CSQ exists)
+      # split the VEP INFO field in several subfields (if 'CSQ' or 'ANN' exists)
       if 'sub_fields' in locals():
-        line = split_CSQ_field(sub_fields, line)
+        line = split_vep_field(sub_fields, line, vep_symbol)
     out.write(line)
 
   inp.close()
   out.close()
   # return sample names with file name, and whether filter b can be activated
   return (out_file, samples, NOFILTERB, format_fields)
-
-def compress_output_file(out_file):
-  """
-  Compress the output file using gzip.
-  This will remove the system call and dependency on bgzip.
-  """
-
-  compressed_filename = '%s.gz' % (os.path.normpath(out_file),)
-  with open(os.path.normpath(out_file)) as f_in, gzip.open(
-  os.path.normpath(compressed_filename), 'wb') as f_out:
-    f_out.writelines(f_in)
-  # remove the original output file
-  try:
-    os.remove(out_file)
-  except:
-    pass
-  return
 
 def create_general_schema(out_folder):
   """
@@ -307,8 +295,6 @@ def script01_api_call(i_file, o_folder):
   (out_file, samples, NOFILTERB, format_fields) = parse_inp_file(inp_file, 
                                                                  out_folder)
   sys.stderr.write("Input file parsed.\n")
-  #compress_output_file(out_file) #superseded by direct gzip write
-  sys.stderr.write("Output file compression complete.\n")
   schema_file = create_general_schema(out_folder)
   edit_global_schema_in_place(schema_file, format_fields)
   sys.stderr.write("General schema created and edited.\n")
