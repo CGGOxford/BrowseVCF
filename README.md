@@ -1,5 +1,5 @@
-Welcome to BrowseVCF version 2.7
-================================
+Welcome to BrowseVCF
+=====================
 
 BrowseVCF is a web-based application and workflow to quickly prioritise 
 disease-causative variants in VCF files.
