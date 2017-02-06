@@ -1,0 +1,3 @@
+For OSX:
+
+tar cvzf BrowseVCF_osx_v2.8.tar.gz --exclude="*.pyc" --exclude="*.vcf.gz" --exclude="*.DS_Store*" --exclude=".git*" LICENSE README.md python27osx/ web/
