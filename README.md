@@ -4,6 +4,9 @@ Welcome to BrowseVCF
 BrowseVCF is a web-based application and workflow to quickly prioritise 
 disease-causative variants in VCF files.
 
+**July 2020 update: BrowseVCF is not officially supported**  
+While we're happy BrowseVCF has proven helpful to many users, we unfortunately no longer have time to maintain it and to keep it up to date with changing VCF format specifications. If you encounter any problems, please check among the known (closed) issues section. We may someday try to update the code and fix the known bugs (no promises though!), but you're very welcome to submit patches and pull requests to fix outstanding issues.
+
 # Table of Contents
 1. [Requirements and Installation](#1-requirements-and-installation)  
   1. [For Windows users](#i-for-windows-users)  
